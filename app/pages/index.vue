@@ -1,11 +1,17 @@
 <template>
     <UiBaseOverlay :open-modal="openModal">
+
         <UiBaseFormModal @close="openModal = false" title="الرحلات"> <template #form>
                 <UiFormBaseInput v-for="input in FormInupts" :key="input.id" :id="input.id" :required="input.required"
                     :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
                     :type="input.type" :label="input.label" :error="input.error" />
+                <UiFormBaseSelectInput v-model="id" :select-options="selectedOptions" label="اههرت الخىلح" id="78a"
+                    selected-value="" placeholder="السم رحتلك البخري" />
                 <UiBaseButton :loading="buttonLoading" @save="submit" />
-            </template></UiBaseFormModal>
+                <p class="bg-red-500 w-full">{{ id }}</p>
+            </template>
+
+        </UiBaseFormModal>
     </UiBaseOverlay>
     <div class="bg-gray-50 py-10">
         <section id="table">
@@ -16,7 +22,17 @@
 </template>
 
 <script setup lang="ts">
-
+const id = ref()
+const selectedOptions = ref<Record<string, string | number>[]>([{
+    id: 1,
+    value: 'elia'
+}, {
+    id: 5,
+    value: 'zeko'
+}, {
+    id: 2,
+    value: 'rezk'
+},])
 const buttonLoading = ref<boolean>(false)
 const formData = ref<Record<string, string | null>>({
     tripName: null,
