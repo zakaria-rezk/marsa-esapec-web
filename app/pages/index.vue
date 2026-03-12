@@ -100,6 +100,6 @@ const rows = ref([{
 const submit = () => {
     validateRequiredInput()
     console.log(formData.value)
-    console.log(errors.value)
+    console.log(errors.value) 
 }
 </script>

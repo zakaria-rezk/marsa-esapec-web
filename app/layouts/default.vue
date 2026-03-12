@@ -5,11 +5,11 @@
                 <Logo class="w-32 m-auto" />
             </div>
             <section id="sidebarditem" class=" my-2 mx-1" v-for="i in items">
-                <div
+                <NuxtLink to="users"
                     class="flex flex-row justify-center sm:justify-between bg-white rounded-full sm:p-2 text-gray-500 ">
                     <p class="hidden sm:inline ">المستخدمين</p>
                     <div> <font-awesome-icon :icon="faUser" class="text-blue-500" /></div>
-                </div>
+                </NuxtLink>
             </section>
         </aside>
         <div class="w-full">
