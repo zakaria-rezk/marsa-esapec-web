@@ -1,6 +1,6 @@
 export function useValidation(
   formObj: Record<string, any>,
-  errors: Record<string, string>,
+  errors: Record<string, any>,
   requiredFailds: string[],
 ) {
   const validateRequiredInput = () => {
@@ -11,7 +11,7 @@ export function useValidation(
         isVaild = false;
       }
     });
-    console.log(isVaild, errors);
+
     return isVaild;
   };
   const resetValues = () => {

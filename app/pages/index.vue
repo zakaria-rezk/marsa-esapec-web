@@ -2,13 +2,16 @@
     <UiBaseOverlay :open-modal="openModal">
 
         <UiBaseFormModal @close="openModal = false" title="الرحلات"> <template #form>
-                <UiFormBaseInput v-for="input in FormInupts" :key="input.id" :id="input.id" :required="input.required"
-                    :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
-                    :type="input.type" :label="input.label" :error="input.error" />
-                <UiFormBaseSelectInput v-model="id" :select-options="selectedOptions" label="اههرت الخىلح" id="78a"
-                    selected-value="" placeholder="السم رحتلك البخري" />
+                <template v-for="input in FormInupts" :key="input.id">
+                    <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
+                        :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
+                        :type="input.type" :label="input.label" :error="errors[input.error]" />
+                    <UiFormBaseSelectInput v-else v-model="formData[input.model]" :select-options="selectedOptions"
+                        :label="input.label" :required="input.required" :placeholder="input.palceholder"
+                        :disabled="false" id="78a" :error="errors[input.error]" />
+                </template>
                 <UiBaseButton :loading="buttonLoading" @save="submit" />
-                <p class="bg-red-500 w-full">{{ id }}</p>
+
             </template>
 
         </UiBaseFormModal>
@@ -22,7 +25,19 @@
 </template>
 
 <script setup lang="ts">
-const id = ref()
+import { useValidation } from '@/composables/useValidation'
+const formData = ref<Record<string, string | null>>({
+    tripName: null,
+    tirpProgram: null,
+    tripPrice: null,
+    tripNumber: null
+})
+const errors = ref<Record<string, string | null>>({
+    tripName: null,
+    tirpProgram: null,
+    tripPrice: null
+})
+const { validateRequiredInput, resetValues } = useValidation(formData.value, errors.value, ['tripName', 'tirpProgram', 'tripNumber'])
 const selectedOptions = ref<Record<string, string | number>[]>([{
     id: 1,
     value: 'elia'
@@ -34,16 +49,7 @@ const selectedOptions = ref<Record<string, string | number>[]>([{
     value: 'rezk'
 },])
 const buttonLoading = ref<boolean>(false)
-const formData = ref<Record<string, string | null>>({
-    tripName: null,
-    tirpProgram: null,
-    tripPrice: null
-})
-const errors = ref({
-    tripName: null,
-    tirpProgram: null,
-    tripPrice: null
-})
+
 const FormInupts = ref([{
     id: 'trip_name',
     type: "string",
@@ -52,7 +58,7 @@ const FormInupts = ref([{
     palceholder: "ادخل اسم الرحلة",
     label: "اسم الرحلة",
     required: true,
-    error: errors.value.tripName
+    error: 'tripName'
 },
 {
     id: 'trip_program',
@@ -62,7 +68,17 @@ const FormInupts = ref([{
     palceholder: "ادخل برنامج الرحلة",
     label: "برنامج الرحلة",
     required: true,
-    error: errors.value.tirpProgram
+    error: 'tirpProgram'
+}, {
+    id: 'trip_number',
+    type: "select",
+    selectOptions: selectedOptions.value,
+    model: 'tripNumber',
+    disabled: false,
+    palceholder: "ادخل رقم الرحلة",
+    label: "رقم الرحلة",
+    required: true,
+    error: 'tripNumber'
 }])
 const openModal = ref(true)
 const cols = ref([{
@@ -82,7 +98,8 @@ const rows = ref([{
 
 }, { name: { value: 'rezk' } }])
 const submit = () => {
+    validateRequiredInput()
     console.log(formData.value)
-    console.log(FormInupts.value)
+    console.log(errors.value)
 }
 </script>
