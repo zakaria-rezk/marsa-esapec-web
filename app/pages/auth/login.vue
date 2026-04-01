@@ -5,14 +5,11 @@
                 <h1>تسجيل الدخول</h1>
                 <p>مرحباً بك مجدداً في مرسي إسكيب تورز</p>
             </div>
-
-
             <div class="form-group">
                 <label for="email">اسم المستخدم</label>
                 <input id="email" v-model="formData.name" type="string" placeholder="أدخل بريدك الإلكتروني" />
                 <p class="w-full h-2 text-red-500">{{ errors.name }}</p>
             </div>
-
             <div class="form-group">
                 <label for="password">كلمة المرور</label>
                 <input id="password" v-model="formData.password" type="password" placeholder="أدخل كلمة المرور" />
@@ -49,12 +46,10 @@ const handleLogin = async () => {
     loading.value = true
     try {
         const response = await login(formData.value)
-
         const token = useCookie("token")
         token.value = response.data.token
         console.log(response.data.user.token)
         router.push('/')
-
     } catch (Err) {
     }
     finally {

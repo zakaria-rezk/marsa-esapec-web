@@ -19,6 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       console.log(config.public.apiBase);
       const token = "a";
       axiosConfig.headers.Authorization = `Barear ${token}`;
+      axiosConfig.headers["Accept-Language"] = "ar";
 
       return axiosConfig;
     },
