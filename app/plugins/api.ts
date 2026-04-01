@@ -1,7 +1,14 @@
 import axios from "axios";
 import { useRuntimeConfig, defineNuxtPlugin } from "#app";
-import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import { useToast } from "@/composables/useToast";
+import type {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+} from "axios";
 export default defineNuxtPlugin((nuxtApp) => {
+  const { addToast } = useToast();
   const config = useRuntimeConfig();
 
   const instance = axios.create({
@@ -9,15 +16,23 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
   instance.interceptors.request.use(
     (axiosConfig: InternalAxiosRequestConfig) => {
-      console.log(config.public.apiBase, "Sdfffff");
+      console.log(config.public.apiBase);
       const token = "a";
       axiosConfig.headers.Authorization = `Barear ${token}`;
+
       return axiosConfig;
     },
   );
-  instance.interceptors.response.use((response: any) => {
-    return response;
-  });
+  instance.interceptors.response.use(
+    (response: AxiosResponse) => {
+      return response;
+    },
+    (error: AxiosError) => {
+      const message = (error.response?.data as any)?.message || "حدث خطاء";
+
+      addToast(message, "error");
+    },
+  );
   return {
     provide: {
       api: instance,

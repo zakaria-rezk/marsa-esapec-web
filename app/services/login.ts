@@ -1,8 +1,8 @@
 interface loginForm {
-  useName: string;
-  password: string;
+  useName: string | null;
+  password: string | null;
 }
-export const login = (params: loginForm) => {
+export const login = async (params: loginForm) => {
   const { $api } = useNuxtApp();
-  $api.post("/auth/login", params);
+  return await $api.post("/auth/login", params);
 };

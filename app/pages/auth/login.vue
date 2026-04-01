@@ -18,13 +18,20 @@
                 <input id="password" v-model="formData.password" type="password" placeholder="أدخل كلمة المرور" />
                 <p class="w-full h-2 text-red-500">{{ errors.password }}</p>
             </div>
-            <button type="submit" @click="handleLogin" class="login-btn">دخول</button>
+            <button type="submit" @click="handleLogin" class="login-btn"
+                :class="{ ' !cursor-not-allowed !opacity-70': loading }">دخول</button>
         </div>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useValidation } from '@/composables/useValidation';
 import { login } from "@/services/login"
+import { useRouter } from 'vue-router';
+definePageMeta({
+    layout: false
+})
+const router = useRouter()
+const loading = ref<Boolean>(false)
 const formData = ref({
     name: null,
     password: null
@@ -33,11 +40,29 @@ const errors = ref({
     name: null,
     password: null
 })
-const { validateRequiredInput, resetValues } = useValidation(formData.value, errors.value, ['name', 'password'])
-const handleLogin = () => {
+const { validateRequiredInput, resetValues, resetErrors } = useValidation(formData.value, errors.value, ['name', 'password'])
+const handleLogin = async () => {
     const isValid = validateRequiredInput()
     if (!isValid) return
-    login(formData.value)
+    console.log(loading.value);
+    resetErrors()
+    loading.value = true
+    try {
+        const response = await login(formData.value)
+
+        const token = useCookie("token")
+        token.value = response.data.token
+        console.log(response.data.user.token)
+        router.push('/')
+
+    } catch (Err) {
+    }
+    finally {
+        loading.value = false
+        resetValues()
+
+        console.log(errors.value)
+    }
     console.log(errors.value)
 
 }

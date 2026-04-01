@@ -18,9 +18,11 @@ export function useValidation(
     Object.keys(formObj).forEach((el) => {
       formObj[el] = null;
     });
+  };
+  const resetErrors = () => {
     Object.keys(errors).forEach((el) => {
-      formObj[el] = null;
+      errors[el] = null;
     });
   };
-  return { validateRequiredInput, resetValues };
+  return { validateRequiredInput, resetValues, resetErrors };
 }
