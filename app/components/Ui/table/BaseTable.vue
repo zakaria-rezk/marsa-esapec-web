@@ -10,7 +10,14 @@
                         <slot name="thead"></slot>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border">
+                <tbody v-if="loading" class="divide-y divide-border">
+                    <tr v-for="i in 5" :key="i" class="animate-pulse">
+                        <td v-for="col in cols" :key="col.key" class="px-6 py-4">
+                            <div class="h-4 bg-gray-200 rounded-md w-full"></div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="divide-y divide-border" v-else>
                     <tr v-for="(row, index) in rows" :key="index" class="hover:bg-background transition">
                         <td v-for="col in cols" :key="col.key" class="px-6 py-4">
                             <span :class="row[col.key]?.class">
@@ -21,7 +28,10 @@
                     </tr>
                 </tbody>
             </table>
-            <section class="w-full text-center" dir="ltr">
+            <section v-if="loading" class="w-full text-center py-4 flex justify-center gap-2">
+                <div v-for="i in 3" :key="i" class="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+            </section>
+            <section class="w-full text-center" dir="ltr" v-else>
                 <button class="px-3 py-1 border border-border rounded disabled:opacity-40">
                     السابق
                 </button>
@@ -44,6 +54,7 @@
 interface Props {
     cols: any[]
     rows: any[]
+    loading: boolean
 }
 const props = defineProps<Props>()
 const emits = defineEmits<{
@@ -63,3 +74,20 @@ const formatArabicNumber = (num: number) => {
     return new Intl.NumberFormat('ar-EG').format(num)
 }
 </script>
+<style scoped>
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-effect {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+</style>

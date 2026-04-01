@@ -47,8 +47,7 @@ const handleLogin = async () => {
     try {
         const response = await login(formData.value)
         const token = useCookie("token")
-        token.value = response.data.token
-        console.log(response.data.user.token)
+        token.value = response.data.user.token
         router.push('/')
     } catch (Err) {
     }
