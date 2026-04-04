@@ -5,7 +5,7 @@
                 <Logo class="w-32 m-auto" />
             </div>
             <section id="sidebarditem" class=" my-2 mx-1" v-for="i in items">
-                <NuxtLink to="users"
+                <NuxtLink :to="i.to"
                     class="flex flex-row justify-center sm:justify-between bg-white rounded-full sm:p-2 text-gray-500 ">
                     <p class="hidden sm:inline ">{{ i.text }}</p>
                     <div> <font-awesome-icon :icon="faUser" class="text-blue-500" /></div>
@@ -24,12 +24,15 @@
 import Logo from "@/assets/svgs/marsaescapelogo.svg";
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 const items = [{
+    to: '/users',
     text: "المستخدمين",
     icon: faUser
 }, {
+    to: '/trips',
     text: "الرحلات",
     icon: faUser
 }, {
+    to: '/trips',
     text: "حجوزات الرحلات",
     icon: faUser
 }]

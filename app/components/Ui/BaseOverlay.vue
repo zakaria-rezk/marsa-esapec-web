@@ -1,8 +1,11 @@
 <template>
-    <transition name="popup">
-        <div v-if="openModal"
-            class="fixed inset-0 z-40 bg-black bg-opacity-50 flex justify-center items-center w-screen h-full m-0 p-0">
-            <slot></slot>
+    <transition name="overlay">
+        <div v-if="openModal" class="fixed inset-0 z-40 bg-black/50 flex justify-center items-center">
+            <transition name="modal">
+                <div class="w-full h-full flex justify-center items-center">
+                    <slot></slot>
+                </div>
+            </transition>
         </div>
     </transition>
 </template>
@@ -13,28 +16,45 @@ interface Props {
 const props = defineProps<Props>()
 </script>
 <style scoped>
-.popup-enter-active,
-.popup-leave-active {
+/* Overlay fade */
+.overlay-enter-active,
+.overlay-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.overlay-enter-from,
+.overlay-leave-to {
+    opacity: 0;
+}
+
+.overlay-enter-to,
+.overlay-leave-from {
+    opacity: 1;
+}
+
+/* Modal animation */
+.modal-enter-active,
+.modal-leave-active {
     transition: all 0.25s ease;
 }
 
-.popup-enter-from {
+.modal-enter-from {
     opacity: 0;
-    transform: translate(50%, -60%) scale(0.95);
+    transform: translateY(20px) scale(0.95);
 }
 
-.popup-enter-to {
+.modal-enter-to {
     opacity: 1;
-    transform: translate(50%, -50%) scale(1);
+    transform: translateY(0) scale(1);
 }
 
-.popup-leave-from {
+.modal-leave-from {
     opacity: 1;
-    transform: translate(50%, -50%) scale(1);
+    transform: translateY(0) scale(1);
 }
 
-.popup-leave-to {
+.modal-leave-to {
     opacity: 0;
-    transform: translate(50%, -60%) scale(0.95);
+    transform: translateY(20px) scale(0.95);
 }
 </style>

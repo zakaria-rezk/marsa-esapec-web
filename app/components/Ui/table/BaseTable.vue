@@ -20,11 +20,13 @@
                 <tbody class="divide-y divide-border" v-else>
                     <tr v-for="(row, index) in rows" :key="index" class="hover:bg-background transition">
                         <td v-for="col in cols" :key="col.key" class="px-6 py-4">
-                            <span :class="row[col.key]?.class">
+                            <span :class="row[col.key]?.class" v-if="!col.slot">
                                 {{ row[col.key]?.value }}
+                            </span><span :class="row[col.key]?.class" v-else>
+                                <slot :name="col.slot" :row="row"></slot>
                             </span>
                         </td>
-                        <slot name="tdata"></slot>
+                       
                     </tr>
                 </tbody>
             </table>

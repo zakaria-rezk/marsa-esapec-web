@@ -1,6 +1,5 @@
 <template>
     <UiBaseOverlay :open-modal="openModal">
-
         <UiBaseFormModal @close="openModal = false" title="الرحلات"> <template #form>
                 <template v-for="input in FormInupts" :key="input.id">
                     <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
@@ -11,9 +10,7 @@
                         :disabled="false" id="78a" :error="errors[input.error]" />
                 </template>
                 <UiBaseButton :loading="buttonLoading" @save="submit" />
-
             </template>
-
         </UiBaseFormModal>
     </UiBaseOverlay>
     <div class="bg-gray-50 py-10">
@@ -100,6 +97,6 @@ const rows = ref([{
 const submit = () => {
     validateRequiredInput()
     console.log(formData.value)
-    console.log(errors.value) 
+    console.log(errors.value)
 }
 </script>

@@ -13,7 +13,7 @@ const cols = ref([{
     value: 'name'
 },
 ]);
-const { data, pending } = useAsyncData('/users', async () => {
+const { data, pending } = useAsyncData('users', async () => {
     const { $api } = useNuxtApp()
     return await $api.get('/users')
 });
