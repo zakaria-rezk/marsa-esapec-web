@@ -9,7 +9,7 @@
         <section id="render_hidden_details">
             <UiBaseOverlay :open-modal="openModal">
                 <UiBaseFormModal @close="openModal = false" title="الرحلات">
-                    <template v-if="modalType == 'form'" #form>
+                    <template v-if="modalType === 'form' || modalType == 'edit'" #form>
                         <template v-for="input in FormInupts" :key="input.id">
                             <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
                                 :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
@@ -177,7 +177,7 @@
                     </template>
                     <template #view v-else>
                         <component :is="component" v-bind="componentProps" @deleteImage="handleRemove"
-                            @addImage="handleAddImages">
+                            @change-status="handleStatus" @addImage="handleAddImages">
                         </component>
                     </template>
                 </UiBaseFormModal>
@@ -197,6 +197,11 @@
                         </button></template> <template #images="{ row }"><button class="btn"
                             @click="openOverlay(row.id.value, 'images')">
                             <font-awesome-icon :icon="faEye" />
+                        </button></template><template #actions="{ row }"><button class="btn"
+                            @click="openOverlay(row.id.value, 'edit')">
+                            <font-awesome-icon :icon="faPen" />
+                        </button><button class="btn mx-3" @click="removeTrip(row.id.value)">
+                            <font-awesome-icon :icon="faTrash" />
                         </button></template>
                 </UiTableBaseTable>
             </section>
@@ -205,9 +210,9 @@
 </template>
 <script lang="ts" setup>
 import {
-    faEye
+    faEye, faPen, faTrash
 } from '@fortawesome/free-solid-svg-icons'
-import { deleteImage, addImage, getTripTypes, addTrip } from '~/services/trips';
+import { deleteImage, addImage, getTripTypes, addTrip, deleteTrip, editTrip, edtiReviewStatus } from '~/services/trips';
 import { useToast } from '@/composables/useToast';
 const { addToast } = useToast()
 const openModal = ref(false);
@@ -241,6 +246,10 @@ const cols = ref([{
     key: 'images',
     value: 'الصور',
     slot: "images"
+}, {
+    key: 'actions',
+    value: 'الاجراءات',
+    slot: "actions"
 },
 ])
 const rows = computed(() => {
@@ -261,7 +270,7 @@ const rows = computed(() => {
 
     }))
 })
-type component = 'reviews' | 'package' | 'images' | 'program' | 'places' | 'form'
+type component = 'reviews' | 'package' | 'images' | 'program' | 'places' | 'form' | 'edit'
 const modalType = ref<component>('program')
 const component = computed(() => {
     switch (modalType.value) {
@@ -301,6 +310,72 @@ const openOverlay = (id: number = 0, type: component) => {
     modalType.value = type
     selectedTripId.value = id
     openModal.value = true
+    if (type === 'edit') {
+        const rowData = rows.value.find((r: any) => {
+            return r.id.value === selectedTripId.value
+        })
+        formData.value.name = rowData?.name.value
+        formData.value.price = rowData?.price.value
+        formData.value.overview = rowData?.overview.value
+        formData.value.tripTypeId = selectedOptions.value.find((o: any) => o.value === rowData?.type.value)?.id || null
+        included.value = rowData?.included.value.map((i: string) => ({
+            model: i,
+            errors: ''
+        }))
+        excluded.value = rowData?.excluded.value.map((i: string) => ({
+            model: i,
+            errors: ''
+        }))
+        places.value = rowData?.places.value.map((i: string) => ({
+            model: i,
+            errors: ''
+        }))
+        days.value = rowData?.days.value.map((d: any) => ({
+            morning: d.morning.map((p: string) => ({
+                model: p,
+                errors: ''
+            })),
+            afternoon: d.afternoon.map((p: string) => ({
+                model: p,
+                errors: ''
+            })),
+            evining: d.evining.map((p: string) => ({
+                model: p,
+                errors: ''
+            }))
+        }))
+    } else {
+        formData.value.name = null
+        formData.value.price = null
+        formData.value.overview = null
+        formData.value.tripTypeId = null
+        included.value = [{
+            model: '',
+            errors: ""
+        },];
+        excluded.value = [{
+            model: '',
+            errors: ""
+        },];
+        places.value = [{
+            model: '',
+            errors: ""
+        },];
+        days.value = [{
+
+            morning: [{
+                model: '',
+                errors: ""
+            }], afternoon: [{
+                model: '',
+                errors: ""
+            }], evining: [{
+                model: '',
+                errors: ""
+            }]
+
+        },]
+    }
 };
 import { useValidation } from '@/composables/useValidation'
 const formData = ref<Record<string, any>>({
@@ -449,6 +524,18 @@ const handleAddImages = async (FormData: Event) => {
     } catch (err) {
 
     }
+};
+const handleStatus = async ({ id, status }: { id: number; status: string }) => {
+    try {
+        console.log(id, status)
+         await edtiReviewStatus(id, { status: status })
+
+        addToast('تم تغيير حالة التقييم بنجاح', 'success')
+        refresh()
+
+    } catch (error) {
+        console.error(error)
+    }
 }
 const submit = async () => {
     const valid = validateRequiredInput()
@@ -459,8 +546,7 @@ const submit = async () => {
     formData.value.included = included.value.map(i => i.model)
     formData.value.excluded = excluded.value.map(i => i.model)
     formData.value.places = places.value.map(i => i.model)
-    console.log(formData.value.places)
-    console.log(formData.value.excluded)
+
     formData.value.days = days.value.map(d => ({
         morning: d.morning.map(p => p.model),
         afternoon: d.afternoon.map(p => p.model),
@@ -469,7 +555,7 @@ const submit = async () => {
     try {
         buttonLoading.value = true
         console.log(formData.value)
-        const res = await addTrip(formData.value)
+        const res = modalType.value === 'form' ? await addTrip(formData.value) : await editTrip(selectedTripId.value, formData.value)
         addToast('تم اضافة الرحلة بنجاح', 'success')
         resetValues()
         resetErrors()
@@ -506,4 +592,17 @@ const submit = async () => {
         buttonLoading.value = false
     }
 }
+const removeTrip = async (id: number) => {
+    if (!data.value) return
+    const backupTrips = [...data.value.data]
+    data.value.data = data.value.data.filter((t: any) => t.id !== id)
+    try {
+        const res = await deleteTrip(id)
+        addToast('تم حذف الرحلة بنجاح', 'success')
+        await refresh()
+    } catch (err) {
+        addToast('حدث خطاء اثناء حذف الرحلة', 'error')
+        data.value.data = backupTrips
+    }
+}   
 </script>

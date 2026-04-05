@@ -25,7 +25,7 @@
                         </h3>
 
                         <!-- Status -->
-                        <span class="text-xs px-2 py-1 rounded-full" :class="statusMap[review.status].class">
+                        <span class="text-xs px-2 py-1 rounded-full" :class="statusMap[review.status]?.class">
                             {{ statusMap[review.status].label }}
                         </span>
                     </div>
@@ -45,7 +45,22 @@
             <p class="text-gray-600 text-sm leading-relaxed">
                 {{ review.comment }}
             </p>
+            <div class="flex items-center justify-end gap-2 mt-3">
+                <!-- Accept -->
+                <button :disabled="review.status === 'accepted'" class="px-3 py-1 text-sm rounded-lg" :class="review.status == 'accepted'
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-green-500 text-white hover:bg-green-600'"
+                    @click="$emit('change-status', { id: review.id, status: 'accepted' })">
+                    قبول
+                </button>
 
+                <!-- Reject -->
+                <button class="px-3 py-1 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+                    @click="$emit('change-status', { id: review.id, status: 'rejected' })">
+                    رفض
+                </button>
+
+            </div>
         </div>
 
     </section>
@@ -56,9 +71,11 @@ interface Review {
     userName: string
     rating: number
     comment: string
-    status: 'confirmed' | 'cancelled' | 'pending'
+    status: 'accepted' | 'rejected' | 'pending'
 }
-
+const emit = defineEmits<{
+    (e: 'change-status', payload: { id: number; status: string }): void
+}>()
 const props = defineProps<{
     reviews: Review[]
 }>()
@@ -66,11 +83,11 @@ const props = defineProps<{
 const { reviews } = toRefs(props)
 
 const statusMap = {
-    confirmed: {
+    accepted: {
         label: 'مؤكد',
         class: 'bg-green-100 text-green-600'
     },
-    cancelled: {
+    rejected: {
         label: 'ملغي',
         class: 'bg-red-100 text-red-600'
     },
