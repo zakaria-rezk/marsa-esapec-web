@@ -1,11 +1,11 @@
 <template>
     <div class="fixed top-5 right-5 space-y-3 z-50">
-        <div v-for="toast in toasts" :key="toast.id"
+        <div v-for="(toast,index) in toasts" :key="toast.id"
             class="px-5 py-3 rounded-xl shadow-lg text-white flex items-center gap-3 animate-slide"
             :class="toastClass(toast.type)">
             <span>{{ toast.message }}</span>
 
-            <button class="ml-auto">
+            <button class="ml-auto" @click="toasts.splice(index, 1)">
                 ✕
             </button>
         </div>
@@ -16,7 +16,6 @@
 import { useToast } from "@/composables/useToast"
 
 const { toasts, addToast } = useToast()
-
 const toastClass = (type: string) => {
     switch (type) {
         case "success":

@@ -1,15 +1,181 @@
 <template>
     <section>
         <div class="flex justify-end p-4">
-            <button
-                class="flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition duration-200">
+            <button @click="openOverlay(0, 'form')" class=" flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5
+                rounded-xl shadow-sm hover:shadow-md transition duration-200">
                 اضافة رحلة
             </button>
         </div>
         <section id="render_hidden_details">
             <UiBaseOverlay :open-modal="openModal">
                 <UiBaseFormModal @close="openModal = false" title="الرحلات">
-                    <template #form>
+                    <template v-if="modalType == 'form'" #form>
+                        <template v-for="input in FormInupts" :key="input.id">
+                            <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
+                                :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
+                                :type="input.type" :label="input.label" :error="errors[input.error]" />
+                            <UiFormBaseSelectInput v-else v-model="formData[input.model]"
+                                :select-options="selectedOptions" :label="input.label" :required="input.required"
+                                :placeholder="input.palceholder" :disabled="false" id="78a"
+                                :error="errors[input.error]" />
+                        </template>
+                        <!-- INCLUDED -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 my-2 p-3 rounded-2xl shadow-sm">
+                            <label class="block text-center text-blue-600 font-semibold mb-2">المتاح</label>
+                            <template v-for="(i, index) in included" :key="index">
+                                <div
+                                    class="relative bg-white/80 backdrop-blur border border-blue-200 rounded-xl p-2 mb-2 shadow-sm">
+                                    <button class="absolute left-2 top-2 text-red-400 hover:text-red-600"
+                                        @click="included.splice(index, 1)">
+                                        ❌
+                                    </button>
+                                    <UiFormBaseInput :id="index" :required="true"
+                                        placeholder="اكتب الاشياء المشمولة في الرحلة" :disabled="false"
+                                        v-model="i.model" type="string" :label="`رقم ${index + 1}`" :error="i.errors" />
+                                </div>
+                            </template>
+                            <button @click="included.push({
+                                model: '',
+                                errors: ''
+                            })" class="w-full text-blue-600 hover:text-blue-800 font-medium transition">
+                                ➕ إضافة
+                            </button>
+                        </div>
+                        <div class="bg-gradient-to-br from-red-50 to-red-100 my-2 p-3 rounded-2xl shadow-sm">
+                            <label class="block text-center text-red-600 font-semibold mb-2">غير المتاح</label>
+                            <template v-for="(i, index) in excluded" :key="index">
+                                <div
+                                    class="relative bg-white/80 backdrop-blur border border-red-200 rounded-xl p-2 mb-2 shadow-sm">
+                                    <button class="absolute left-2 top-2 text-red-400 hover:text-red-700"
+                                        @click="excluded.splice(index, 1)">
+                                        ❌
+                                    </button>
+                                    <UiFormBaseInput :id="index" :required="true"
+                                        placeholder="اكتب الاشياء غير المشمولة في الرحلة" :disabled="false"
+                                        v-model="i.model" type="string" :label="`رقم ${index + 1}`" :error="i.errors" />
+                                </div>
+                            </template>
+                            <button @click="excluded.push({
+                                model: '',
+                                errors: ''
+                            })" class=" w-full text-red-600 hover:text-red-800 font-medium transition">
+                                ➕ إضافة
+                            </button>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 my-2 p-3 rounded-2xl shadow-sm">
+                            <label class="block text-center text-emerald-600 font-semibold mb-2">الاماكن</label>
+                            <template v-for="(i, index) in places" :key="index">
+                                <div
+                                    class="relative bg-white/80 backdrop-blur border border-emerald-200 rounded-xl p-2 mb-2 shadow-sm">
+                                    <button class="absolute left-2 top-2 text-red-400 hover:text-red-600"
+                                        @click="places.splice(index, 1)">
+                                        ❌
+                                    </button>
+                                    <UiFormBaseInput :id="index" :required="true"
+                                        placeholder="اكتب اماكن الزيارة في الرحلة" :disabled="false" v-model="i.model"
+                                        type="string" :label="`رقم ${index + 1}`" :error="i.errors" />
+                                </div>
+                            </template>
+                            <button @click="places.push({
+                                model: '',
+                                errors: ''
+                            })" class=" w-full text-emerald-600 hover:text-emerald-800 font-medium transition">
+                                ➕ إضافة
+                            </button>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 my-2 py-3 rounded-2xl shadow-sm">
+                            <label class="block text-center text-blue-600 font-semibold mb-2">
+                                الايام
+                            </label>
+                            <template v-for="(day, index) in days" :key="index">
+                                <div
+                                    class="relative  backdrop-blur border border-yellow-200 rounded-xl p-3 mb-4 shadow">
+                                    <div
+                                        class="flex items-center justify-between bg-white/80 backdrop-blur border border-gray-200 rounded-xl px-4 py-2 shadow-sm my-2">
+                                        <p class="text-gray-700 font-semibold">
+                                            يوم رقم <span class="text-gray-200 font-bold">{{ index + 1 }}</span>
+                                        </p>
+                                        <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium 
+               bg-red-50 text-red-600 border border-red-200
+               hover:bg-red-100 hover:text-red-700 transition" @click="days.splice(index, 1)">
+                                            ❌ حذف اليوم
+                                        </button>
+                                    </div>
+                                    <div class="bg-blue-50 relative border border-blue-100 rounded-xl p-3 mb-3">
+
+                                        <p class="text-blue-600 font-medium mb-2">الصباح</p>
+                                        <template v-for="(period, index) in day.morning" :key="index">
+                                            <div class="relative"><button
+                                                    class="absolute left-2 top-2 text-red-400 hover:text-red-600"
+                                                    @click="day.morning.splice(index, 1)"
+                                                    :disabled="day.morning.length == 1">
+                                                    ❌
+                                                </button>
+                                                <UiFormBaseInput :id="index" :required="true"
+                                                    placeholder="اكتب نشاط في الصباح" :disabled="false"
+                                                    v-model="period.model" type="string" :label="`رقم ${index + 1}`"
+                                                    :error="period.errors" />
+                                            </div>
+
+                                            <button class="w-full text-blue-500 hover:text-blue-700 transition"
+                                                @click="day.morning.push({ model: '', errors: '' })">
+                                                ➕
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <div class="bg-orange-50 border border-orange-100 rounded-xl p-3 mb-3">
+                                        <p class="text-orange-600 font-medium mb-2">الظهيرة</p>
+                                        <template v-for="(period, index) in day.afternoon" :key="index">
+                                            <div class="relative"><button
+                                                    class="absolute left-2 top-2 text-red-400 hover:text-red-600"
+                                                    @click="day.afternoon.splice(index, 1)"
+                                                    :disabled="day.afternoon.length == 1">
+                                                    ❌
+                                                </button>
+                                                <UiFormBaseInput :id="index" :required="true"
+                                                    placeholder="اكتب نشاط وقت الظهيرة" :disabled="false"
+                                                    v-model="period.model" type="string" :label="`رقم ${index + 1}`"
+                                                    :error="period.errors" />
+                                            </div>
+                                            <button class="w-full text-orange-500 hover:text-orange-700 transition"
+                                                @click="day.afternoon.push({ model: '', errors: '' })">
+                                                ➕
+                                            </button>
+                                        </template>
+                                    </div>
+
+                                    <!-- Evening -->
+                                    <div class="bg-purple-50 border border-purple-100 rounded-xl p-3">
+                                        <p class="text-purple-600 font-medium mb-2">المساء</p>
+                                        <template v-for="(period, index) in day.evining" :key="index">
+                                            <div class="relative"><button
+                                                    class="absolute left-2 top-2 text-red-400 hover:text-red-600"
+                                                    @click="day.evining.splice(index, 1)"
+                                                    :disabled="day.evining.length == 1">
+                                                    ❌
+                                                </button>
+                                                <UiFormBaseInput :id="index" :required="true"
+                                                    placeholder="اكتب نشاط في المساء" :disabled="false"
+                                                    v-model="period.model" type="string" :label="`رقم ${index + 1}`"
+                                                    :error="period.errors" />
+                                            </div>
+                                        </template>
+
+                                        <button class="w-full text-purple-500 hover:text-purple-700 transition"
+                                            @click="day.evining.push({ model: '', errors: '' })">
+                                            ➕
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                            <button @click="addDay"
+                                class="w-full bg-yellow-200 hover:bg-yellow-300 text-yellow-800 py-2 rounded-xl font-medium transition">
+                                ➕ إضافة يوم
+                            </button>
+                        </div>
+                        <UiBaseButton :loading="buttonLoading" @save="submit" />
+                    </template>
+                    <template #view v-else>
                         <component :is="component" v-bind="componentProps" @deleteImage="handleRemove"
                             @addImage="handleAddImages">
                         </component>
@@ -41,7 +207,7 @@
 import {
     faEye
 } from '@fortawesome/free-solid-svg-icons'
-import { deleteImage, addImage } from '~/services/trips';
+import { deleteImage, addImage, getTripTypes, addTrip } from '~/services/trips';
 import { useToast } from '@/composables/useToast';
 const { addToast } = useToast()
 const openModal = ref(false);
@@ -95,7 +261,7 @@ const rows = computed(() => {
 
     }))
 })
-type component = 'reviews' | 'package' | 'images' | 'program' | 'places'
+type component = 'reviews' | 'package' | 'images' | 'program' | 'places' | 'form'
 const modalType = ref<component>('program')
 const component = computed(() => {
     switch (modalType.value) {
@@ -131,11 +297,125 @@ const componentProps = computed(() => {
             }
     }
 })
-const openOverlay = (id: number, type: component) => {
+const openOverlay = (id: number = 0, type: component) => {
     modalType.value = type
     selectedTripId.value = id
     openModal.value = true
+};
+import { useValidation } from '@/composables/useValidation'
+const formData = ref<Record<string, any>>({
+    name: null,
+    price: null,
+    overview: null,
+    tripTypeId: null,
+    included: [],
+    excluded: [],
+    places: [],
+    days: []
+})
+const included = ref([{
+    model: '',
+    errors: ""
+},]);
+const excluded = ref([{
+    model: '',
+    errors: ""
+},]);
+const places = ref([{
+    model: '',
+    errors: ""
+},]);
+const days = ref([{
+    morning: [{
+        model: '',
+        errors: ""
+    }], afternoon: [{
+        model: '',
+        errors: ""
+    }], evining: [{
+        model: '',
+        errors: ""
+    }]
+
+},])
+const addDay = () => {
+    days.value.push({
+
+        morning: [{
+            model: '',
+            errors: ""
+        }], afternoon: [{
+            model: '',
+            errors: ""
+        }], evining: [{
+            model: '',
+            errors: ""
+        }]
+
+    })
 }
+const errors = ref<Record<string, string | null>>({
+    tripTypeId: null,
+    overview: null,
+    price: null,
+    name: null
+})
+const { validateRequiredInput, resetValues, resetErrors } = useValidation(formData.value, errors.value, ['tripTypeId', 'overview', 'price', 'name'])
+const selectedOptions = ref<Record<string, string | number>[]>([{}])
+const buttonLoading = ref<boolean>(false)
+const getTripsTypes = async () => {
+    try {
+        const res = await getTripTypes()
+        console.log(res.data)
+        selectedOptions.value = res.data.map((t: any) => ({
+            id: t.id,
+            value: t.type
+        }))
+    } catch (err) {
+
+    }
+}
+getTripsTypes()
+const FormInupts = ref([{
+    id: 'name',
+    type: "string",
+    model: 'name',
+    disabled: false,
+    palceholder: "ادخل اسم الرحلة",
+    label: "اسم الرحلة",
+    required: true,
+    error: 'name'
+},
+{
+    id: 'overview',
+    type: "textarea",
+    model: 'overview',
+    disabled: false,
+    palceholder: " اكتب هنا ",
+    label: "نظرة عامة",
+    required: true,
+    error: 'overview'
+}, {
+    id: 'price',
+    type: "number",
+    model: 'price',
+    disabled: false,
+    palceholder: "ادخل السعر",
+    label: "السعر",
+    required: true,
+    error: 'price'
+},
+{
+    id: 'trip_type',
+    type: "select",
+    selectOptions: selectedOptions.value,
+    model: 'tripTypeId',
+    disabled: false,
+    palceholder: "ادخل نوع الرحلة",
+    label: " نوع الرحلة",
+    required: true,
+    error: 'tripTypeId'
+}])
 const handleRemove = async (id: number) => {
     if (!data.value) return
     const tripIndex = data.value.data.findIndex(
@@ -168,6 +448,62 @@ const handleAddImages = async (FormData: Event) => {
         refresh()
     } catch (err) {
 
+    }
+}
+const submit = async () => {
+    const valid = validateRequiredInput()
+    if (!valid) {
+        addToast('يرجى ملئ الحقول المطلوبة', 'error')
+        return
+    }
+    formData.value.included = included.value.map(i => i.model)
+    formData.value.excluded = excluded.value.map(i => i.model)
+    formData.value.places = places.value.map(i => i.model)
+    console.log(formData.value.places)
+    console.log(formData.value.excluded)
+    formData.value.days = days.value.map(d => ({
+        morning: d.morning.map(p => p.model),
+        afternoon: d.afternoon.map(p => p.model),
+        evining: d.evining.map(p => p.model)
+    }))
+    try {
+        buttonLoading.value = true
+        console.log(formData.value)
+        const res = await addTrip(formData.value)
+        addToast('تم اضافة الرحلة بنجاح', 'success')
+        resetValues()
+        resetErrors()
+        included.value = [{
+            model: '',
+            errors: ""
+        },];
+        excluded.value = [{
+            model: '',
+            errors: ""
+        },];
+        places.value = [{
+            model: '',
+            errors: ""
+        },];
+        days.value = [{
+
+            morning: [{
+                model: '',
+                errors: ""
+            }], afternoon: [{
+                model: '',
+                errors: ""
+            }], evining: [{
+                model: '',
+                errors: ""
+            }]
+
+        },]
+        refresh()
+    } catch (err) {
+        addToast('حدث خطاء اثناء اضافة الرحلة', 'error')
+    } finally {
+        buttonLoading.value = false
     }
 }
 </script>

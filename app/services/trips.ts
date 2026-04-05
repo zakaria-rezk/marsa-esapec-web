@@ -10,3 +10,11 @@ export async function addImage(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.patch(`/trip/${id}`, param);
 }
+export async function getTripTypes() {
+  const { $api } = useNuxtApp();
+  return await $api.get("trip-type");
+}
+export async function addTrip(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("trip", param);
+}

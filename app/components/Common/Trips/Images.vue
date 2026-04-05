@@ -60,6 +60,4 @@ const addImg = (e: Event) => {
     emits('addImage', formData.value)
 }
 
-
-
 </script>

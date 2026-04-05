@@ -1,14 +1,11 @@
 <template>
     <section class="p-4 grid md:grid-cols-2 gap-6">
-
         <!-- Included -->
         <div class="bg-white w-full border col-span-2 border-border rounded-xl p-5 shadow-sm">
-
             <!-- Title -->
             <h2 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
                 📝 نظرة عامة
             </h2>
-
             <!-- Content -->
             <p class="text-sm text-gray-600 leading-relaxed">
                 {{ overview }}

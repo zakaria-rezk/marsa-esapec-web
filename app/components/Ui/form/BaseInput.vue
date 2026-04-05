@@ -13,7 +13,7 @@
 <script setup lang="ts">
 const model = defineModel<any>()
 interface Props {
-    id: string,
+    id: string | number,
     type: string,
     placeholder: string,
     required: boolean,
