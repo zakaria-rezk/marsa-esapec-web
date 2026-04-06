@@ -32,6 +32,10 @@ const items = [{
     text: "الرحلات",
     icon: faUser
 }, {
+    to: '/triptype',
+    text: "انواع الرحلات",
+    icon: faUser
+}, {
     to: '/trips',
     text: "حجوزات الرحلات",
     icon: faUser
