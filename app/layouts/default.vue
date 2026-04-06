@@ -36,7 +36,7 @@ const items = [{
     text: "انواع الرحلات",
     icon: faUser
 }, {
-    to: '/trips',
+    to: '/trips/reservations',
     text: "حجوزات الرحلات",
     icon: faUser
 }]

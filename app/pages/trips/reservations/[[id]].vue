@@ -8,22 +8,27 @@
         </div>
         <section id="render_hidden_details">
             <UiBaseOverlay :open-modal="openModal">
-                <UiBaseFormModal @close="openModal = false" title="الرحلات">
-                    <template #form>
+                <UiBaseFormModal @close="openModal = false" title="حجوزات الرحلات">
+                    <template #form v-if="modalType == 'add'">
                         <template v-for="input in FormInupts" :key="input.id">
                             <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
                                 :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
                                 :type="input.type" :label="input.label" :error="errors[input.error]" />
                         </template>
                         <UiBaseButton :loading="buttonLoading" @save="submit" />
+                    </template> <template #view v-else>
+                        <CommonTripsReservationView :details="detailsComponetPorps" />
                     </template>
                 </UiBaseFormModal>
             </UiBaseOverlay>
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #actions="{ row }"><button
-                            class="btn" @click="openEditModal(row.id.value)">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #details="{ row }"><button
+                            class="btn mx-3" @click="openOverly(row.id.value, 'view')">
+                            <font-awesome-icon :icon="faEye" />
+                        </button></template><template #actions="{ row }"><button class="btn"
+                            @click="openEditModal(row.id.value)">
                             <font-awesome-icon :icon="faPen" />
                         </button><button class="btn mx-3" @click="removeTripType(row.id.value)">
                             <font-awesome-icon :icon="faTrash" />
@@ -36,14 +41,15 @@
 
 <script setup lang="ts">
 import { addTripType, deleteTripType, editTripType } from "@/services/trips";
-import { useValidation } from '@/composables/useValidation'; import {
-    faPen, faTrash
+import { useValidation } from '@/composables/useValidation';
+import {
+    faPen, faTrash, faEye
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
 const { addToast } = useToast()
-const { data, pending, refresh } = useAsyncData('trips', async () => {
+const { data, pending, refresh } = useAsyncData('reservations', async () => {
     const { $api } = useNuxtApp()
-    return await $api.get('/trip-type')
+    return await $api.get('/reservations')
 });
 const formData = ref<Record<string, string | null>>({
     type: null
@@ -51,7 +57,7 @@ const formData = ref<Record<string, string | null>>({
 const errors = ref<Record<string, string | null>>({
     type: null
 })
-const modalType = ref<"add" | "edit">("add")
+const modalType = ref<"add" | "view">("add")
 const selectedId = ref<number | null>(null)
 const { validateRequiredInput, resetValues } = useValidation(formData.value, errors.value, ['type'])
 const buttonLoading = ref<boolean>(false)
@@ -67,20 +73,38 @@ const FormInupts = ref([{
 },])
 const openModal = ref(false)
 const cols = ref([{
-    key: 'type',
+    key: 'cutomerName',
+    value: ' اسم العميل',
+}, {
+    key: 'tripName',
+    value: 'الرحلة',
+}, {
+    key: 'tripType',
     value: 'نوع الرحلة',
+}, {
+    key: 'details',
+    value: 'التفاصيل',
+    slot: "details"
 }, {
     key: 'actions',
     value: 'الاجراءات',
     slot: "actions"
-},
+}
 ])
 const rows = computed(() => {
-    console.log("computed before")
     if (!data.value) return []; console.log("computed after return")
     return data.value.data.map((T: any) => ({
         id: { value: T.id, class: '' },
-        type: { value: T.type, class: '' },
+        cutomerName: { value: T.name, class: '' },
+        tripName: { value: T.trip.name, class: '' },
+        tripType: { value: T.trip.tripType.type, class: '' },
+        hotel: { value: T.hotel.name, class: '' },
+        roomNumber: { value: T.roomNumber, class: '' },
+        date: { value: T.date, class: '' },
+        specialRequest: { value: T.specialRequest, class: '' },
+        status: { value: T.status, class: '' },
+        peopoleCount: { value: T.peopoleCount, class: '' },
+        phone: { value: T.phone, class: '' },
     }))
 })
 const submit = async () => {
@@ -101,12 +125,30 @@ const submit = async () => {
     }
 }
 
-const openEditModal = (id: number) => {
-    modalType.value = "edit"
-    openModal.value = true
+const openOverly = (id: number, type: string) => {
+    modalType.value = type as "add" | "view"
+    openModal.value = true;
     selectedId.value = id
     formData.value.type = data.value?.data.find((T: any) => T.id === id).type
 }
+const detailsComponetPorps = computed(() => {
+    if (!data.value) return {};
+    const reservation = data.value.data.find((T: any) => T.id === selectedId.value)
+    console.log("reservation", reservation)
+    return {
+        customerName: reservation.name,
+        tripName: reservation.trip.name,
+        tripType: reservation.trip.tripType.type,
+        hotel: reservation.hotel,
+        roomNumber: reservation.roomNumber,
+        date: reservation.date,
+        specialRequest: reservation.specialRequest,
+        status: reservation.status,
+        peopleCount: reservation.peopleCount,
+        phone: reservation.phone,
+
+    }
+})
 const removeTripType = async (id: number) => {
     try {
         await deleteTripType(id)
