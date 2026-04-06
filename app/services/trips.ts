@@ -6,11 +6,15 @@ export async function deleteTrip(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip/${id}`);
 }
+export async function deleteResarvation(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/reservations/${id}`);
+}
 export async function deleteTripType(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip-type/${id}`);
 }
-export async function getTrips(id: number) {
+export async function getTrips() {
   const { $api } = useNuxtApp();
   return await $api.get(`/trip`);
 }
@@ -25,6 +29,10 @@ export async function getTripTypes() {
 export async function addTrip(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/trip", param);
+}
+export async function addResvartion(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/reservations", param);
 }
 export async function addTripType(param: any) {
   const { $api } = useNuxtApp();
@@ -41,6 +49,10 @@ export async function editTripType(id: number, param: any) {
 export async function edtiReviewStatus(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.patch(`/trip-reviews/${id} `, param);
+}
+export async function edtiReservationStatus(id: number, param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.patch(`/reservations/${id}/status`, param);
 }
 export async function getTripType(id: number, param: any) {
   const { $api } = useNuxtApp();
