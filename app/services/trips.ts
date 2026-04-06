@@ -6,7 +6,7 @@ export async function deleteTrip(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip/${id}`);
 }
-export async function deleteResarvation(id: number) {
+export async function deleteReservation(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/reservations/${id}`);
 }
@@ -18,13 +18,19 @@ export async function getTrips() {
   const { $api } = useNuxtApp();
   return await $api.get(`/trip`);
 }
+export async function getTripTypes() {
+  const { $api } = useNuxtApp();
+  return await $api.get("/trip-type");
+}
+export async function filterReservation(query: any) {
+  const { $api } = useNuxtApp();
+  return await $api.get("/reservations/search", {
+    params: query,
+  });
+}
 export async function addImage(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.patch(`/trip/${id}`, param);
-}
-export async function getTripTypes() {
-  const { $api } = useNuxtApp();
-  return await $api.get("trip-type");
 }
 export async function addTrip(param: any) {
   const { $api } = useNuxtApp();

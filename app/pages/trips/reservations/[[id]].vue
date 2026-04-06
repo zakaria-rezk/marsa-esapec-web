@@ -1,8 +1,54 @@
 <template>
     <section>
-        <div class="flex justify-end p-4">
-            <button @click="openModal = true; modalType = 'add'" class=" flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5
-                rounded-xl shadow-sm hover:shadow-md transition duration-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 p-4">
+            <!-- Filters -->
+            <div class="bg-gray-50/50 p-4 rounded-2xl border border-gray-100 shadow-sm" dir="rtl">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex flex-col gap-1.5 min-w-[160px] flex-1 md:flex-none">
+                        <label class="text-xs font-bold text-gray-500 mr-1">تاريخ الرحلة</label>
+                        <div class="relative">
+                            <span
+                                class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-400">📅</span>
+                            <input v-model="filters.date" type="date"
+                                class="w-full pr-10 pl-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" />
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5 min-w-[140px] flex-1 md:flex-none">
+                        <label class="text-xs font-bold text-gray-500 mr-1">حالة الحجز</label>
+                        <select v-model="filters.status"
+                            class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
+                            <option value="">جميع الحالات</option>
+                            <option value="pending">🕒 قيد الانتظار</option>
+                            <option value="confirmed">✅ مؤكد</option>
+                            <option value="cancelled">❌ ملغي</option>
+                            <option value="ended">🏁 منتهي</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5 min-w-[200px] flex-1 md:flex-none">
+                        <label class="text-xs font-bold text-gray-500 mr-1">اختر الرحلة</label>
+                        <select v-model="filters.tripId"
+                            class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all cursor-pointer">
+                            <option value="">جميع الرحلات</option>
+                            <option v-for="trip in selectedOptions" :key="trip.id" :value="trip.id">
+                                🚢 {{ trip.value }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex items-end gap-2 pt-5">
+                        <button @click="applyFilters"
+                            class="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-200 transition-all active:scale-95">
+                            <span>🔍</span> بحث
+                        </button>
+                        <button @click="clearFilters"
+                            class="px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-500 border border-gray-200 rounded-xl text-sm font-medium transition-all active:scale-95">
+                            إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Button -->
+            <button @click="openModal = true; modalType = 'add'"
+                class="flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition duration-200">
                 اضافة حجز جديد
             </button>
         </div>
@@ -42,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { edtiReservationStatus, deleteResarvation, getTrips, addResvartion } from "@/services/trips";
+import { edtiReservationStatus, deleteReservation, getTrips, addResvartion, filterReservation } from "@/services/trips";
 import { useValidation } from '@/composables/useValidation';
 import {
     faPen, faTrash, faEye
@@ -53,7 +99,11 @@ const selectedOptions = ref<Record<string, string | number>[]>([{}])
 const { data, pending, refresh } = useAsyncData('reservations', async () => {
     const { $api } = useNuxtApp()
     return await $api.get('/reservations')
-});
+}); const filters = reactive({
+    date: '',
+    status: '',
+    tripId: ''
+})
 const formData = ref<Record<string, string | null>>({
     name: null,
     phone: null,
@@ -188,7 +238,8 @@ const cols = ref([{
 }
 ])
 const rows = computed(() => {
-    if (!data.value) return []; console.log("computed after return")
+    console.log("data.value", data.value)
+    if (!data.value) return [];
     return data.value.data.map((T: any) => ({
         id: { value: T.id, class: '' },
         cutomerName: { value: T.name, class: '' },
@@ -263,11 +314,36 @@ const changeStatus = async (status: string) => {
 const removeTripType = async (id: number) => {
 
     try {
-        await deleteResarvation(id)
+        await deleteReservation(id)
         addToast("تم حذف الحجز بنجاح", "success")
         refresh()
     } catch (error) {
         addToast("حدث خطأ اثناء حذف الحجز ", "error")
+        console.log(error)
+    }
+}
+const applyFilters = async () => {
+    try {
+        const res = await filterReservation(filters)
+
+        if (!data.value) return
+        data.value = {
+            ...data.value,
+            data: res.data
+        } ;console.log("filterReservation", res.data)
+    } catch (error) {
+        addToast("حدث خطأ اثناء تطبيق الفلاتر ", "error")
+        console.log(error)
+    }
+}
+const clearFilters = async () => {
+    filters.date = ''
+    filters.status = ''
+    filters.tripId = ''
+    try {
+        refresh()
+    } catch (error) {
+        addToast("حدث خطأ اثناء مسح الفلاتر ", "error")
         console.log(error)
     }
 }
