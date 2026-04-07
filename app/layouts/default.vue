@@ -39,5 +39,9 @@ const items = [{
     to: '/trips/reservations',
     text: "حجوزات الرحلات",
     icon: faUser
+}, {
+    to: '/packages',
+    text: " الباقات",
+    icon: faUser
 }]
 </script>

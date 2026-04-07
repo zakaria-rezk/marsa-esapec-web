@@ -325,12 +325,11 @@ const removeTripType = async (id: number) => {
 const applyFilters = async () => {
     try {
         const res = await filterReservation(filters)
-
         if (!data.value) return
         data.value = {
             ...data.value,
             data: res.data
-        } ;console.log("filterReservation", res.data)
+        } 
     } catch (error) {
         addToast("حدث خطأ اثناء تطبيق الفلاتر ", "error")
         console.log(error)

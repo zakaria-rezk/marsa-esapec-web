@@ -14,6 +14,10 @@ export async function deleteTripType(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip-type/${id}`);
 }
+export async function deletePackage(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/packages/${id}`);
+}
 export async function getTrips() {
   const { $api } = useNuxtApp();
   return await $api.get(`/trip`);
@@ -36,6 +40,10 @@ export async function addTrip(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/trip", param);
 }
+export async function addPackage(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/packages", param);
+}
 export async function addResvartion(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/reservations", param);
@@ -51,6 +59,10 @@ export async function editTrip(id: number, param: any) {
 export async function editTripType(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.put(`/trip-type/${id} `, param);
+}
+export async function editPackage(id: number, param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.put(`/packages/${id} `, param);
 }
 export async function edtiReviewStatus(id: number, param: any) {
   const { $api } = useNuxtApp();
