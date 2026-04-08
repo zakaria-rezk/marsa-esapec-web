@@ -50,8 +50,16 @@ const items = [{
     text: "تاكسي",
     icon: faUser
 }, {
+    to: '/taxi/reservations',
+    text: "حجوزات التاكسي",
+    icon: faUser
+}, {
     to: '/simcard',
     text: " خطوط الموبايل",
+    icon: faUser
+}, {
+    to: '/simcard/reservations',
+    text: " حجوزات خطوط الموبايل",
     icon: faUser
 },]
 </script>

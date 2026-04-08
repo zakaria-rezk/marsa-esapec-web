@@ -13,6 +13,9 @@ export async function deleteReservation(id: number) {
 export async function deleteTripType(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip-type/${id}`);
+}export async function deleteTaxiTransfer(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/taxibooking/${id}`);
 }
 export async function deleteSimCard(id: number) {
   const { $api } = useNuxtApp();
