@@ -53,8 +53,9 @@
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #actions="{ row }"><button
-                            class="btn" @click="openoverly(row.id.value, 'edit')">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending" :pagination="pagination"
+                    @changePage="changePage"><template #actions="{ row }"><button class="btn"
+                            @click="openoverly(row.id.value, 'edit')">
                             <font-awesome-icon :icon="faPen" />
                         </button><button class="btn mx-3" @click="removeTripType(row.id.value)">
                             <font-awesome-icon :icon="faTrash" />
@@ -79,11 +80,26 @@ const { addToast } = useToast()
 //     const { $api } = useNuxtApp()
 //     return await $api.get('/trip-type')
 // });
+const pagination = ref({
+    page: 1,
+    perpage: 10,
+    total: 1
+})
+const changePage = (page: number) => {
+
+    pagination.value.page = page
+    refresh()
+}
 const { data, pending, refresh } = useAsyncData(
     'taxi',
     async () => {
+
         const { $api } = useNuxtApp()
-        return await $api.get('/taxi')
+        const res = await $api.get(`/taxi?page=${pagination.value.page}&perPage=${pagination.value.perpage}`)
+        pagination.value.total = res?.data?.data?.total
+        pagination.value.page = res?.data?.data?.page
+        return res
+
     },
     {
         default: () => ({ data: [] }),
@@ -167,7 +183,7 @@ const cols = ref([{
 ])
 const rows = computed(() => {
     if (!data.value) return [];
-    return data.value.data.map((T: any) => ({
+    return data.value?.data?.data?.map((T: any) => ({
         id: { value: T.id, class: '' },
         from: { value: T.from, class: '' },
         to: { value: T.to, class: '' },

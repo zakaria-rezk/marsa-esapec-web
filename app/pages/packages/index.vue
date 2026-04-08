@@ -124,8 +124,9 @@
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #trips="{ row }"><button
-                            class="btn mx-3" @click="openOverly(row.id.value, 'edit')">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending" :pagination="pagination"
+                    @changePage="changePage"><template #trips="{ row }"><button class="btn mx-3"
+                            @click="openOverly(row.id.value, 'edit')">
                             <font-awesome-icon :icon="faPen" />
                         </button></template><template #actions="{ row }"><button class="btn mx-3"
                             @click="removePackage(row.id.value)">
@@ -149,9 +150,23 @@ definePageMeta({
 })
 const { addToast } = useToast();
 const selectedTrips = ref<Record<string, any>[]>([{}])
+const pagination = ref({
+    page: 1,
+    perpage: 10,
+    total: 1
+})
+const changePage = (page: number) => {
+    console.log("page changed sssto ", page)
+    pagination.value.page = page
+    refresh()
+}
 const { data, pending, refresh } = useAsyncData('packages', async () => {
     const { $api } = useNuxtApp()
-    return await $api.get('/packages')
+    const res = await $api.get(`/package?page=${pagination.value.page}&perPage=${pagination.value.perpage}`)
+    pagination.value.total = res?.data?.data?.total
+    pagination.value.page = res?.data?.data?.page
+    return res
+
 }, {
     default: () => ({ data: [] }),
     server: false // 👈 VERY important for hydration mismatch

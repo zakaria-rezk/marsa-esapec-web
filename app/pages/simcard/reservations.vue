@@ -31,8 +31,9 @@
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #actions="{ row }"><button
-                            class="btn mx-3" @click="removeTaxiTransfer(row.id.value)">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending" :pagination="pagination"
+                    @changePage="changePage"><template #actions="{ row }"><button class="btn mx-3"
+                            @click="removeTaxiTransfer(row.id.value)">
                             <font-awesome-icon :icon="faTrash" />
                         </button></template><template #specialRequest="{ row }"><button class="btn mx-3"
                             @click="openoverly(row.id.value)">
@@ -58,11 +59,25 @@ const { addToast } = useToast()
 //     const { $api } = useNuxtApp()
 //     return await $api.get('/trip-type')
 // });
+const pagination = ref({
+    page: 1,
+    perpage: 10,
+    total: 1
+})
+const changePage = (page: number) => {
+    console.log("page changed sssto ", page)
+    pagination.value.page = page
+    refresh()
+}
 const { data, pending, refresh } = useAsyncData(
     'taxibooking',
     async () => {
         const { $api } = useNuxtApp()
-        return await $api.get('/taxibooking')
+        const res = await $api.get(`/simcards?page=${pagination.value.page}&perPage=${pagination.value.perpage}`)
+        pagination.value.total = res?.data?.data?.total
+        pagination.value.page = res?.data?.data?.page
+        return res
+
     },
     {
         default: () => ({ data: [] }),
