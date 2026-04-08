@@ -185,7 +185,8 @@
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending" :pagination="pagination"
+                    @changePage="changePage">
                     <template #reviews="{ row }"><button class="btn" @click="openOverlay(row.id.value, 'reviews')">
                             <font-awesome-icon :icon="faEye" />
                         </button></template> <template #days="{ row }"><button class="btn"
@@ -212,18 +213,35 @@
 import {
     faEye, faPen, faTrash
 } from '@fortawesome/free-solid-svg-icons'
-import { deleteImage, addImage, getTripTypes, addTrip, deleteTrip, editTrip, edtiReviewStatus } from '~/services/trips';
+import { deleteImage, addImage, getTripTypes, addTrip, deleteTrip, editTrip, edtiReviewStatus } from '~/services/trips'; definePageMeta({
+    middleware: 'auth'
+})
 import { useToast } from '@/composables/useToast';
 const { addToast } = useToast()
 const openModal = ref(false);
 const selectedTripId = ref<number>()//fetch trips data
+
+const pagination = ref({
+    page: 1,
+    perpage: 10,
+    total: 1
+})
+const changePage = (page: number) => {
+    console.log("page changed sssto ", page)
+    pagination.value.page = page
+    refresh()
+}
 const { data, pending, refresh } = useAsyncData('trips', async () => {
     const { $api } = useNuxtApp()
-    return await $api.get('/trip')
+    console.log("fetching data with page ", pagination.value.page, " and perpage ", pagination.value.perpage)
+    const res = $api.get(`/trip?page=${pagination.value.page}&perPage=${pagination.value.perpage}`)
+    pagination.value.total = res?.data?.data?.total
+    pagination.value.page = res?.data?.data?.page
+    return res
 }, {
     default: () => ({ data: [] }),
     server: false // 👈 VERY important for hydration mismatch
-});
+},);
 const cols = ref([{
     key: 'name',
     value: 'الاسم',
@@ -255,10 +273,9 @@ const cols = ref([{
     slot: "actions"
 },
 ])
+
 const rows = computed(() => {
-    console.log("computed before")
-    if (!data.value) return []; console.log("computed after return")
-    return data.value?.data.map((T: any) => ({
+    return data.value?.data?.data?.map((T: any) => ({
         id: { value: T.id, class: '' },
         name: { value: T.name, class: '' },
         type: { value: T.tripType?.type, class: 'bg-blue-100 text-blue-600 px-2 py-1 rounded' },
@@ -270,7 +287,6 @@ const rows = computed(() => {
         images: { value: T.images, class: '' },
         places: { value: T.places, class: '' },
         overview: { value: T.overview, class: '' }
-
     }))
 })
 type component = 'reviews' | 'package' | 'images' | 'program' | 'places' | 'form' | 'edit'

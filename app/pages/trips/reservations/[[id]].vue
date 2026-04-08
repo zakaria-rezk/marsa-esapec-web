@@ -94,6 +94,9 @@ import {
     faPen, faTrash, faEye
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
+definePageMeta({
+    middleware: 'auth'
+})
 const { addToast } = useToast();
 const selectedOptions = ref<Record<string, string | number>[]>([{}])
 const { data, pending, refresh } = useAsyncData('reservations', async () => {
@@ -329,7 +332,7 @@ const applyFilters = async () => {
         data.value = {
             ...data.value,
             data: res.data
-        } 
+        }
     } catch (error) {
         addToast("حدث خطأ اثناء تطبيق الفلاتر ", "error")
         console.log(error)

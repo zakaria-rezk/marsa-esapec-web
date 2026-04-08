@@ -144,6 +144,9 @@ import {
     faPen, faTrash, faEye
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
+definePageMeta({
+    middleware: 'auth'
+})
 const { addToast } = useToast();
 const selectedTrips = ref<Record<string, any>[]>([{}])
 const { data, pending, refresh } = useAsyncData('packages', async () => {

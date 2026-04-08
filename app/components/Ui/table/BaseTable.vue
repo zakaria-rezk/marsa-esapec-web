@@ -26,7 +26,7 @@
                                 <slot :name="col.slot" :row="row"></slot>
                             </span>
                         </td>
-                       
+
                     </tr>
                 </tbody>
             </table>
@@ -40,15 +40,16 @@
                 <!-- <button v-if="pagination.current_page < middle" class="px-3 py-1  rounded disabled:opacity-40">
                     ...
                 </button> -->
-                <button class="px-3 py-1 rounded border border-border" v-for="(page, index) in pagination.total_pages"
-                    :class="{ 'bg-primary': page === pagination.current_page }">{{ formatArabicNumber(page) }}</button>
+                <button class="px-3 py-1 rounded border border-border" v-for="(page, index) in pagination.total"
+                    :key="index" @click="chagePage(page)" :class="{ 'bg-primary': page === pagination.page }">{{
+                        formatArabicNumber(page) }}</button>
                 <!-- <button v-if="pagination.current_page > middle" class="px-3 py-1  rounded disabled:opacity-40">
                     ...
                 </button> -->
                 <button class="px-3 py-1 border border-border rounded disabled:opacity-40">التالي</button>
             </section>
         </div>
-        <p v-if="!rows.length" class="text-center py-2 text-gray-600 text-sm">لا يوجد بيانات</p>
+        <p v-if="!rows?.length" class="text-center py-2 text-gray-600 text-sm">لا يوجد بيانات</p>
     </div>
 </template>
 
@@ -56,21 +57,24 @@
 interface Props {
     cols: any[]
     rows: any[]
-    loading: boolean
+    loading: boolean,
+    pagination: {
+        page: number,
+        total: number
+    }
 }
 const props = defineProps<Props>()
 const emits = defineEmits<{
-    (e: 'pageChage', pageNumber: number): void
+    (e: 'changePage', pageNumber: number): void
 }>()
 const pagination = {
-    total_pages: 10,
-    current_page: 2
+    page: 10,
+    total: 2
 }
-const middle = computed(() => {
-    return pagination.total_pages / 2
-})
+
 const chagePage = (page: number) => {
-    emits('pageChage', page)
+    console.log("page changed to ", page)
+    emits('changePage', page)
 }
 const formatArabicNumber = (num: number) => {
     return new Intl.NumberFormat('ar-EG').format(num)

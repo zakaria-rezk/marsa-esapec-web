@@ -50,7 +50,9 @@ import { useValidation } from '@/composables/useValidation'; import {
     faEye, faTrash
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
-import { f } from "vue-router/dist/router-CWoNjPRp.mjs";
+definePageMeta({
+    middleware: 'auth'
+})
 const { addToast } = useToast()
 // const { data, pending, refresh } = useAsyncData('trips', async () => {
 //     const { $api } = useNuxtApp()

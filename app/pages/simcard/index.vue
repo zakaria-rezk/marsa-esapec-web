@@ -35,10 +35,13 @@
 <script setup lang="ts">
 import { addSimCard, deleteSimCard } from "@/services/trips";
 import { useValidation } from '@/composables/useValidation';
- import {
+import {
     faPen, faTrash
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
+definePageMeta({
+    middleware: 'auth'
+})
 const { addToast } = useToast()
 // const { data, pending, refresh } = useAsyncData('trips', async () => {
 //     const { $api } = useNuxtApp()
