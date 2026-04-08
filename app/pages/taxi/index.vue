@@ -94,7 +94,7 @@ const formData = ref<Record<string, any>>({
     sedanPrice: null,
     HighSprice: null,
     isHotel: false,
-    specialRequest: null
+
 })
 const errors = ref<Record<string, string | null>>({
     from: null,
@@ -143,15 +143,6 @@ const FormInupts = ref([{
     label: "السعر للعربية الملاكي",
     required: true,
     error: 'sedanPrice'
-}, {
-    id: 'specialRequest',
-    type: "textarea",
-    model: 'specialRequest',
-    disabled: false,
-    palceholder: " طلب خاص",
-    label: "  طلب خاص",
-    required: true,
-    error: 'specialRequest'
 },])
 const openModal = ref(false)
 const cols = ref([{
@@ -217,7 +208,6 @@ const openoverly = (id: number, type: 'add'
         formData.value.HighSprice = Number(rowData.HighSprice.value)
         formData.value.sedanPrice = Number(rowData.sedanPrice.value)
         formData.value.isHotel = rowData.isHotel.value
-        formData.value.specialRequest = rowData.specialRequest?.value || null
 
     }
 }

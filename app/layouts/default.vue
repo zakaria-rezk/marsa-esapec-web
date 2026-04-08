@@ -39,15 +39,19 @@ const items = [{
     to: '/trips/reservations',
     text: "حجوزات الرحلات",
     icon: faUser
-}, 
+},
 // {
 //     to: '/packages',
 //     text: " الباقات",
 //     icon: faUser
 // },
- {
+{
     to: '/taxi',
     text: "تاكسي",
+    icon: faUser
+}, {
+    to: '/simcard',
+    text: " خطوط الموبايل",
     icon: faUser
 },]
 </script>
