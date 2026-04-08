@@ -22,7 +22,7 @@
 </template>
 <script setup lang="ts">
 import Logo from "@/assets/svgs/marsaescapelogo.svg";
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 const items = [{
     to: '/users',
     text: "المستخدمين",
@@ -39,9 +39,15 @@ const items = [{
     to: '/trips/reservations',
     text: "حجوزات الرحلات",
     icon: faUser
-}, {
-    to: '/packages',
-    text: " الباقات",
+}, 
+// {
+//     to: '/packages',
+//     text: " الباقات",
+//     icon: faUser
+// },
+ {
+    to: '/taxi',
+    text: "تاكسي",
     icon: faUser
-}]
+},]
 </script>

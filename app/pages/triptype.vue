@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="flex justify-end p-4">
-            <button @click="openModal = true; modalType = 'add'" class=" flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5
+            <button @click="openoverly(0, 'add')" class=" flex items-center gap-2 bg-primary font-medium hover:bg-primary/90 text-gray-500 px-5 py-2.5
                 rounded-xl shadow-sm hover:shadow-md transition duration-200">
                 اضافة نوع رحلة
             </button>
@@ -11,9 +11,9 @@
                 <UiBaseFormModal @close="openModal = false" title="الرحلات">
                     <template #form>
                         <template v-for="input in FormInupts" :key="input.id">
-                            <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
-                                :placeholder="input.palceholder" :disabled="false" v-model="formData[input.model]"
-                                :type="input.type" :label="input.label" :error="errors[input.error]" />
+                            <UiFormBaseInput v-if="input?.type != 'select'" :id="input?.id" :required="input?.required"
+                                :placeholder="input?.palceholder" :disabled="false" v-model="formData[input?.model]"
+                                :type="input?.type" :label="input?.label" :error="errors[input?.error]" />
                         </template>
                         <UiBaseButton :loading="buttonLoading" @save="submit" />
                     </template>
@@ -23,7 +23,7 @@
         <div class="bg-gray-50 py-10">
             <section id="table">
                 <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #actions="{ row }"><button
-                            class="btn" @click="openEditModal(row.id.value)">
+                            class="btn" @click="openoverly(row.id.value, 'edit')">
                             <font-awesome-icon :icon="faPen" />
                         </button><button class="btn mx-3" @click="removeTripType(row.id.value)">
                             <font-awesome-icon :icon="faTrash" />
@@ -41,10 +41,21 @@ import { useValidation } from '@/composables/useValidation'; import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from "@/composables/useToast";
 const { addToast } = useToast()
-const { data, pending, refresh } = useAsyncData('trips', async () => {
-    const { $api } = useNuxtApp()
-    return await $api.get('/trip-type')
-});
+// const { data, pending, refresh } = useAsyncData('trips', async () => {
+//     const { $api } = useNuxtApp()
+//     return await $api.get('/trip-type')
+// });
+const { data, pending, refresh } = useAsyncData(
+    'trip-types',
+    async () => {
+        const { $api } = useNuxtApp()
+        return await $api.get('/trip-type')
+    },
+    {
+        default: () => ({ data: [] }),
+        server: false // 👈 VERY important for hydration mismatch
+    }
+)
 const formData = ref<Record<string, string | null>>({
     type: null
 })
@@ -53,15 +64,15 @@ const errors = ref<Record<string, string | null>>({
 })
 const modalType = ref<"add" | "edit">("add")
 const selectedId = ref<number | null>(null)
-const { validateRequiredInput, resetValues } = useValidation(formData.value, errors.value, ['type'])
+const { validateRequiredInput, resetValues, resetErrors } = useValidation(formData.value, errors.value, ['type'])
 const buttonLoading = ref<boolean>(false)
 const FormInupts = ref([{
     id: 'type',
     type: "string",
     model: 'type',
     disabled: false,
-    palceholder: "ادخل اسم الرحلة",
-    label: "اسم الرحلة",
+    palceholder: "ادخل نوع الرحلة",
+    label: "نوع الرحلة",
     required: true,
     error: 'type'
 },])
@@ -86,7 +97,7 @@ const rows = computed(() => {
 const submit = async () => {
     const valid = validateRequiredInput()
     buttonLoading.value = true
-    if (!valid) return; buttonLoading.value = true
+    if (!valid) return;
     try {
         const res = modalType.value === 'edit' ? await editTripType(selectedId.value, formData.value) : await addTripType(formData.value)
         addToast("تمت اضافة نوع الرحلة بنجاح", "success")
@@ -101,11 +112,14 @@ const submit = async () => {
     }
 }
 
-const openEditModal = (id: number) => {
-    modalType.value = "edit"
+const openoverly = (id: number, type: 'add' | 'edit') => {
+    resetErrors()
+    resetValues()
+    modalType.value = type
     openModal.value = true
     selectedId.value = id
-    formData.value.type = data.value?.data.find((T: any) => T.id === id).type
+    if (!data.value) return
+    formData.value.type = data.value?.data?.find((T: any) => T.id === id).type
 }
 const removeTripType = async (id: number) => {
     try {

@@ -220,6 +220,9 @@ const selectedTripId = ref<number>()//fetch trips data
 const { data, pending, refresh } = useAsyncData('trips', async () => {
     const { $api } = useNuxtApp()
     return await $api.get('/trip')
+}, {
+    default: () => ({ data: [] }),
+    server: false // 👈 VERY important for hydration mismatch
 });
 const cols = ref([{
     key: 'name',
@@ -255,10 +258,10 @@ const cols = ref([{
 const rows = computed(() => {
     console.log("computed before")
     if (!data.value) return []; console.log("computed after return")
-    return data.value.data.map((T: any) => ({
+    return data.value?.data.map((T: any) => ({
         id: { value: T.id, class: '' },
         name: { value: T.name, class: '' },
-        type: { value: T.tripType.type, class: 'bg-blue-100 text-blue-600 px-2 py-1 rounded' },
+        type: { value: T.tripType?.type, class: 'bg-blue-100 text-blue-600 px-2 py-1 rounded' },
         price: { value: T.price, class: '' },
         reviews: { value: T.reviews, class: '' },
         days: { value: T.days, class: '' },
@@ -310,6 +313,7 @@ const openOverlay = (id: number = 0, type: component) => {
     modalType.value = type
     selectedTripId.value = id
     openModal.value = true
+    resetErrors()
     if (type === 'edit') {
         const rowData = rows.value.find((r: any) => {
             return r.id.value === selectedTripId.value
@@ -441,7 +445,7 @@ const buttonLoading = ref<boolean>(false)
 const getTripsTypes = async () => {
     try {
         const res = await getTripTypes()
-        console.log(res.data)
+
         selectedOptions.value = res.data.map((t: any) => ({
             id: t.id,
             value: t.type
@@ -450,7 +454,9 @@ const getTripsTypes = async () => {
 
     }
 }
-getTripsTypes()
+onMounted(() => {
+    getTripsTypes()
+});
 const FormInupts = ref([{
     id: 'name',
     type: "string",
@@ -528,7 +534,7 @@ const handleAddImages = async (FormData: Event) => {
 const handleStatus = async ({ id, status }: { id: number; status: string }) => {
     try {
         console.log(id, status)
-         await edtiReviewStatus(id, { status: status })
+        await edtiReviewStatus(id, { status: status })
 
         addToast('تم تغيير حالة التقييم بنجاح', 'success')
         refresh()

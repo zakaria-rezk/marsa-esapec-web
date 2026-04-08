@@ -16,6 +16,9 @@ const cols = ref([{
 const { data, pending } = useAsyncData('users', async () => {
     const { $api } = useNuxtApp()
     return await $api.get('/users')
+},{
+    default: () => ({ data: [] }),
+    server: false // 👈 VERY important for hydration mismatch
 });
 const rows = computed(() => {
     if (!data.value) return []

@@ -149,6 +149,9 @@ const selectedTrips = ref<Record<string, any>[]>([{}])
 const { data, pending, refresh } = useAsyncData('packages', async () => {
     const { $api } = useNuxtApp()
     return await $api.get('/packages')
+}, {
+    default: () => ({ data: [] }),
+    server: false // 👈 VERY important for hydration mismatch
 });
 const formData = ref<Record<string, any>>({
     name: null,
@@ -248,7 +251,7 @@ const submit = async () => {
     formData.value.highlights = highlights.value.map(i => i.model)
 
     try {
-        modalType.value === 'form' ? await addPackage(formData.value) : await editPackage(selectedId.value as number, formData.value)
+        modalType.value === 'add' ? await addPackage(formData.value) : await editPackage(selectedId.value as number, formData.value)
         addToast("تم انشاء الباقة بنجاح ", "success")
         resetValues()
         resetErrors()

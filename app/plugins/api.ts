@@ -19,7 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       console.log(config.public.apiBase);
 
       const token = useCookie("token").value;
-      console.log(token);
+    
       axiosConfig.headers.Authorization = `Barear ${token}`;
       axiosConfig.headers["Accept-Language"] = "ar";
 
@@ -32,7 +32,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     (error: AxiosError) => {
       console.log(error);
-      const message = (error.response?.data as any)?.message || "حدث خطاء";
+      const message = (error.response?.data as any)?.message ;
 
       addToast(message, "error");
     },

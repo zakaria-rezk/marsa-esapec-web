@@ -51,10 +51,16 @@ export async function addResvartion(param: any) {
 export async function addTripType(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/trip-type", param);
+}export async function addTaxiTransfer(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/taxi", param);
 }
 export async function editTrip(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.patch(`/trip/${id} `, param);
+}export async function editTaxiTransfer(id: number, param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.patch(`/taxi/${id} `, param);
 }
 export async function editTripType(id: number, param: any) {
   const { $api } = useNuxtApp();
