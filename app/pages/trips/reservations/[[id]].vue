@@ -153,7 +153,7 @@ const getTripsTypes = async () => {
     try {
         const res = await getTrips()
         console.log(res.data)
-        selectedOptions.value = res.data.map((t: any) => ({
+        selectedOptions.value = res.data?.data?.map((t: any) => ({
             id: t.id,
             value: t.name
         }))

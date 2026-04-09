@@ -58,7 +58,7 @@ interface Props {
     cols: any[]
     rows: any[]
     loading: boolean,
-    pagination: {
+    pagination?: {
         page: number,
         total: number
     }

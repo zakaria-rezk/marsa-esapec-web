@@ -118,8 +118,8 @@ const cols = ref([{
 },
 ])
 const rows = computed(() => {
-    console.log("computed before")
-    if (!data.value) return []; console.log("computed after return")
+    
+    if (!data.value) return []; 
     return data?.value?.data?.data?.map((T: any) => ({
         id: { value: T.id, class: '' },
         capacity: { value: T.capacity, class: '' },

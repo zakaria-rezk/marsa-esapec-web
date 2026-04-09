@@ -40,11 +40,11 @@ const items = [{
     text: "حجوزات الرحلات",
     icon: faUser
 },
-// {
-//     to: '/packages',
-//     text: " الباقات",
-//     icon: faUser
-// },
+{
+    to: '/trips/reviews',
+    text: "تقييمات الرحلات",
+    icon: faUser
+},
 {
     to: '/taxi',
     text: "تاكسي",

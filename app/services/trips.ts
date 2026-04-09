@@ -13,7 +13,12 @@ export async function deleteReservation(id: number) {
 export async function deleteTripType(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip-type/${id}`);
-}export async function deleteTaxiTransfer(id: number) {
+}
+export async function deleteTripReview(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/trip-reviews/${id}`);
+}
+export async function deleteTaxiTransfer(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/taxibooking/${id}`);
 }
@@ -46,6 +51,10 @@ export async function addImage(id: number, param: any) {
 export async function addTrip(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/trip", param);
+}
+export async function addTripReview(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/trip-reviews", param);
 }
 export async function addPackage(param: any) {
   const { $api } = useNuxtApp();
