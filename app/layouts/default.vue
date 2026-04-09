@@ -74,5 +74,9 @@ const items = [{
     to: '/simcard/reviews',
     text: "  تقييمات خطوط الموبايل",
     icon: faUser
+}, {
+    to: '/faqs',
+    text: "الاسئلة الشائعة ",
+    icon: faUser
 },]
 </script>

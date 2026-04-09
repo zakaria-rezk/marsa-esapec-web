@@ -128,3 +128,22 @@ export async function getTripType(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.get(`/trip-type`, param);
 }
+//faqs
+export async function addTaxiFaq(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/taxifaqs", param);
+}
+
+export async function deleteTaxiFaq(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/taxifaqs/${id}`);
+}
+export const addFaq = async (url: string, param: any) => {
+  const { $api } = useNuxtApp();
+  return await $api.post(url, param);
+};
+
+export const deleteFaq = async (url: string, id: number) => {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`${url}/${id}`);
+};
