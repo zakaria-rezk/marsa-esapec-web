@@ -8,7 +8,7 @@
         </div>
         <section id="render_hidden_details">
             <UiBaseOverlay :open-modal="openModal">
-                <UiBaseFormModal @close="openModal = false" title="تقييمات الرحلات">
+                <UiBaseFormModal @close="openModal = false" title="تقييمات خطوط الموبايل">
                     <template #form>
                         <template v-for="input in FormInupts" :key="input.id">
                             <UiFormBaseInput v-if="input.type != 'select'" :id="input.id" :required="input.required"
@@ -26,7 +26,26 @@
         </section>
         <div class="bg-gray-50 py-10">
             <section id="table">
-                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #actions="{ row }">
+                <UiTableBaseTable :cols="cols" :rows="rows" :loading="pending"><template #edit="{ row }">
+
+                        <div class="flex  gap-2">
+                            <!-- Accept -->
+                            <button :disabled="row.status === 'accepted'" class="px-3 py-1 text-sm rounded-lg" :class="row.status == 'accepted'
+                                ? 'bg-gray-300 cursor-not-allowed'
+                                : 'bg-green-500 text-white hover:bg-green-600'"
+                                @click="changeStatus({ id: row.id.value, status: 'accepted' })">
+                                قبول
+                            </button>
+
+                            <!-- Reject -->
+                            <button
+                                class="px-3 py-1 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+                                @click="changeStatus({ id: row.id.value, status: 'rejected' })">
+                                رفض
+                            </button>
+
+                        </div>
+                    </template><template #actions="{ row }">
 
                         <button class="btn mx-3" @click="removeTripReview(row.id.value)">
                             <font-awesome-icon :icon="faTrash" />
@@ -39,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { addTripReview, deleteTripReview, getTrips } from "@/services/trips";
+import { addSimcardReview, deleteSimcardReview, edtiSimcardsReviewStatus } from "@/services/trips";
 import { useValidation } from '@/composables/useValidation'; import {
     faPen, faTrash
 } from '@fortawesome/free-solid-svg-icons'
@@ -54,10 +73,10 @@ const selectedOptions = ref<Record<string, string | number>[]>([{}])
 //     return await $api.get('/trip-type')
 // });
 const { data, pending, refresh } = useAsyncData(
-    'trip-reviews',
+    'simcardreviews',
     async () => {
         const { $api } = useNuxtApp()
-        return await $api.get('/trip-reviews')
+        return await $api.get('/simcardreviews')
     },
     {
         default: () => ({ data: [] }),
@@ -66,42 +85,18 @@ const { data, pending, refresh } = useAsyncData(
 )
 const formData = ref<Record<string, string | null>>({
     userName: null,
-    tripId: null,
     rating: null,
     comment: null
 })
 const errors = ref<Record<string, string | null>>({
     userName: null,
-    tripId: null,
     rating: null,
     comment: null
 })
-const getTripsTypes = async () => {
-    try {
-        const res = await getTrips()
-        console.log(res.data)
-        selectedOptions.value = res.data?.data?.map((t: any) => ({
-            id: t.id,
-            value: t.name
-        }))
-    } catch (err) {
 
-    }
-}
-getTripsTypes()
-const { validateRequiredInput, resetValues, resetErrors } = useValidation(formData.value, errors.value, ['userName', 'tripId', 'rating', 'comment'])
+const { validateRequiredInput, resetValues, resetErrors } = useValidation(formData.value, errors.value, ['userName', 'rating', 'comment'])
 const buttonLoading = ref<boolean>(false)
 const FormInupts = ref([{
-    id: 'trip',
-    type: "select",
-    model: 'tripId',
-    selectOptions: selectedOptions.value,
-    disabled: false,
-    palceholder: "اختر الرحلة",
-    label: "اختر الرحلة",
-    required: true,
-    error: 'name'
-}, {
     id: 'userName',
     type: "string",
     model: 'userName',
@@ -134,9 +129,6 @@ const cols = ref([{
     key: 'userName',
     value: 'اسم المستخدم',
 }, {
-    key: 'trip',
-    value: 'الرحلة',
-}, {
     key: 'rating',
     value: 'التقييم',
 }, {
@@ -146,6 +138,10 @@ const cols = ref([{
     key: 'status',
     value: 'التعليق',
 }, {
+    key: 'edit',
+    value: 'الاجراءات',
+    slot: "edit"
+}, {
     key: 'actions',
     value: 'الاجراءات',
     slot: "actions"
@@ -153,9 +149,8 @@ const cols = ref([{
 ])
 const rows = computed(() => {
     if (!data.value) return [];
-    return data.value?.data?.data?.map((T: any) => ({
+    return data.value?.data?.map((T: any) => ({
         id: { value: T.id, class: '' },
-        trip: { value: T.trip.name, class: '' },
         rating: { value: T.rating, class: '' },
         comment: { value: T.comment, class: '' },
         userName: { value: T.userName, class: '' },
@@ -167,7 +162,7 @@ const submit = async () => {
     buttonLoading.value = true
     if (!valid) return;
     try {
-        const res = await addTripReview(formData.value)
+        const res = await addSimcardReview(formData.value)
         addToast("تمت اضافة   التقيمم", "success")
         resetValues()
         refresh()
@@ -188,12 +183,22 @@ const openoverly = () => {
 }
 const removeTripReview = async (id: number) => {
     try {
-        await deleteTripReview(id)
+        await deleteSimcardReview(id)
         addToast("تم حذف  التقييم ", "success")
         refresh()
     } catch (error) {
         addToast("حدث خطأ اثناء التقييم ", "error")
         console.log(error)
     }
-}   
+}
+const changeStatus = async (param: any) => {
+    try {
+        await edtiSimcardsReviewStatus(param.id, { status: param.status })
+        addToast("تم تغيير حالة  التقييم ", "success")
+        refresh()
+    } catch (error) {
+        addToast("حدث خطأ اثناء تغيير حالة  التقييم ", "error")
+        console.log(error)
+    }
+}
 </script>

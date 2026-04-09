@@ -18,6 +18,14 @@ export async function deleteTripReview(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/trip-reviews/${id}`);
 }
+export async function deleteSimcardReview(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/simcardreviews/${id}`);
+}
+export async function deleteTaxiReview(id: number) {
+  const { $api } = useNuxtApp();
+  return await $api.delete(`/taxireviews/${id}`);
+}
 export async function deleteTaxiTransfer(id: number) {
   const { $api } = useNuxtApp();
   return await $api.delete(`/taxibooking/${id}`);
@@ -55,6 +63,14 @@ export async function addTrip(param: any) {
 export async function addTripReview(param: any) {
   const { $api } = useNuxtApp();
   return await $api.post("/trip-reviews", param);
+}
+export async function addSimcardReview(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/simcardreviews", param);
+}
+export async function addTaxiReview(param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.post("/taxireviews", param);
 }
 export async function addPackage(param: any) {
   const { $api } = useNuxtApp();
@@ -95,6 +111,14 @@ export async function editPackage(id: number, param: any) {
 export async function edtiReviewStatus(id: number, param: any) {
   const { $api } = useNuxtApp();
   return await $api.patch(`/trip-reviews/${id} `, param);
+}
+export async function edtiSimcardsReviewStatus(id: number, param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.patch(`/simcardreviews/${id} `, param);
+}
+export async function edtiTaxiReviewStatus(id: number, param: any) {
+  const { $api } = useNuxtApp();
+  return await $api.patch(`/taxireviews/${id} `, param);
 }
 export async function edtiReservationStatus(id: number, param: any) {
   const { $api } = useNuxtApp();

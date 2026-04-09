@@ -6,9 +6,14 @@
             </div>
             <section id="sidebarditem" class=" my-2 mx-1" v-for="i in items">
                 <NuxtLink :to="i.to"
-                    class="flex flex-row justify-center sm:justify-between bg-white rounded-full sm:p-2 text-gray-500 ">
-                    <p class="hidden sm:inline ">{{ i.text }}</p>
-                    <div> <font-awesome-icon :icon="faUser" class="text-blue-500" /></div>
+                    class="group flex flex-row justify-center sm:justify-between items-center rounded-full sm:px-4 sm:py-2 text-gray-500 transition-all duration-200"
+                    active-class="bg-blue-50 text-blue-600 font-medium shadow-sm">
+                    <p class="hidden sm:inline">{{ i.text }}</p>
+
+                    <div>
+                        <font-awesome-icon :icon="faUser"
+                            class="text-gray-400 group-hover:text-blue-500 group-[.router-link-active]:text-blue-600 transition" />
+                    </div>
                 </NuxtLink>
             </section>
         </aside>
@@ -54,12 +59,20 @@ const items = [{
     text: "حجوزات التاكسي",
     icon: faUser
 }, {
+    to: '/taxi/reviews',
+    text: " تقييمات التاكسي",
+    icon: faUser
+}, {
     to: '/simcard',
     text: " خطوط الموبايل",
     icon: faUser
 }, {
     to: '/simcard/reservations',
     text: " حجوزات خطوط الموبايل",
+    icon: faUser
+}, {
+    to: '/simcard/reviews',
+    text: "  تقييمات خطوط الموبايل",
     icon: faUser
 },]
 </script>

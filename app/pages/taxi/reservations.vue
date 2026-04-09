@@ -8,7 +8,7 @@
         </div>
         <section id="render_hidden_details">
             <UiBaseOverlay :open-modal="openModal">
-                <UiBaseFormModal @close="openModal = false" title="تاكسي">
+                <UiBaseFormModal @close="openModal = false" title="حجوزات التاكسي">
                     <template #form>
                         <section class="p-4">
                             <div v-if="!seletedRquest" class="text-center text-gray-400 py-10">
