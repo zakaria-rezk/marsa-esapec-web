@@ -1,8 +1,8 @@
 <template>
-  <div dir="rtl">
+  <div >
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <UiToast />
+    <!-- <UiToast /> -->
   </div>
 </template>

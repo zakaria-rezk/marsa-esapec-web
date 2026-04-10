@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRuntimeConfig, defineNuxtPlugin } from "#app";
-import { useToast } from "@/composables/useToast";
+// import { useToast } from "@/composables/useToast";
 import type {
   AxiosInstance,
   InternalAxiosRequestConfig,
@@ -35,7 +35,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       console.log(error);
       const message = (error.response?.data as any)?.message;
 
-      addToast(message, "error");
+      // addToast(message, "error");
     },
   );
   return {
