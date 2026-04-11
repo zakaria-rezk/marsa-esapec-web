@@ -32,8 +32,8 @@
                     <!-- RIGHT IMAGE GRID -->
                     <div class="flex-1 relative flex justify-end">
                         <img :src="see" alt="">
-                        <!-- top right image -->
-                        <!-- <div
+        
+                       <div
                                 class="w-56 h-64 md:w-64 md:h-72 bg-secondary/20 rounded-lg overflow-hidden shadow-lg z-10">
                                 <div
                                     class="w-full h-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground text-xs">
@@ -55,7 +55,7 @@
                                     class="w-full h-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground text-xs">
                                     IMG
                                 </div>
-                            </div> -->
+                            </div>
                     </div>
                 </div>
             </section>

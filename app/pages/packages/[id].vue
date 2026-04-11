@@ -1,12 +1,12 @@
 <template>
-    <div></div>
+
     <div class="min-h-screen w-full bg-muted">
 
         <!-- Hero Image -->
         <div class="w-full h-[350px] bg-secondary/80" />
 
         <!-- Content -->
-        <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div class=" mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-7xl px-12">
 
             <!-- Left -->
             <div class="lg:col-span-3 space-y-8">
@@ -210,8 +210,9 @@
             </div>
 
         </div>
-        <div class="min-h-screen bg-background">
-            <section class="py-12 md:py-20 px-4">
+
+        <div class=" bg-background">
+            <section class="py-12 md:py-8 px-4">
                 <div class="max-w-7xl mx-auto">
 
                     <h2 class="text-xl md:text-3xl font-bold text-secondary mb-8 md:mb-10">
@@ -267,6 +268,68 @@
                 </div>
             </section>
         </div>
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 mt-4 py-10 lg:pt-12 pb-10 px-12">
+                <div v-for="(pkg, index) in packages" :key="index"
+                    class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                    <!-- IMAGE -->
+                    <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
+                        IMG
+
+                        <div
+                            class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
+                            <Star class="w-3 h-3 text-primary fill-primary" />
+                            <span class="font-semibold text-foreground">
+                                {{ pkg.rating }}
+                            </span>
+                            <span class="text-muted-foreground">
+                                ({{ pkg.reviews }} reviews)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold  mb-2 text-primary-foreground">
+                            {{ pkg.title }}
+                        </h3>
+
+                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
+                            <MapPin class="w-3.5 h-3.5" />
+                            {{ pkg.location }}
+                        </div>
+
+                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
+                            <Calendar class="w-3.5 h-3.5" />
+                            {{ pkg.duration }}
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
+                            <div v-for="(amenity, i) in pkg.amenities" :key="i"
+                                class="flex flex-col items-center gap-1">
+                                <component :is="pkg.amenityIcons[i]" class="w-4 h-4 text-[#666666]" />
+                                <span class="text-[11px] text-[#666666]">
+                                    {{ amenity }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+
+                                <span class="text-primary-danger text-xl font-bold">
+                                    {{ pkg.price }}
+                                </span>
+                                <span class="text-border text-sm">/Person</span>
+                            </div>
+                        </div>
+                        <button
+                            class="mt-4 bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
+                            View Package
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section class="py-16 md:py-24 px-4">
             <div class="max-w-3xl mx-auto">
 
@@ -301,8 +364,64 @@
 </template>
 
 
-<script setup>import { Star, CheckCheck } from "lucide-vue-next";
+<script setup>
+import {
+    MapPin,
+    Calendar,
+    Users,
+    Hotel,
+    Phone,
+    User,
+    MessageCircle,
+    Landmark,
+    Sun,
+    Crown,
+    Building,
+    Bus,
+    Smartphone,
+    Ship,
 
+    Star,
+    CheckCircle, BadgePercent, MessageSquare
+} from "lucide-vue-next";
+const packages = [
+    {
+        title: "Marsa Alam 5-Day Explorer",
+        location: "Marsa Alam",
+        duration: "5 Days 4 Nights",
+        rating: 4.96,
+        reviews: 672,
+        discount: "-20% Off",
+        oldPrice: "$900",
+        price: "$750",
+        amenities: ["Hotel", "Transfer", "Tourist SIM", "Sea Trips"],
+        amenityIcons: [Building, Bus, Smartphone, Ship],
+    },
+    {
+        title: "Marsa Alam & Luxor Combo – 6 Days",
+        location: "Marsa Alam, Luxor",
+        duration: "6 Days 5 Nights",
+        rating: 4.96,
+        reviews: 672,
+        discount: "-20% Off",
+        oldPrice: "$900",
+        price: "$750",
+        amenities: ["Hotel", "Transfer", "Tourist SIM", "Temple Trips"],
+        amenityIcons: [Building, Bus, Smartphone, Landmark],
+    },
+    {
+        title: "Red Sea & Cairo Highlights – 7 Days",
+        location: "Marsa Alam, Cairo",
+        duration: "5 Days 4 Nights",
+        rating: 4.96,
+        reviews: 672,
+        discount: "-20% Off",
+        oldPrice: "$900",
+        price: "$750",
+        amenities: ["Hotel", "Transfer", "Tourist SIM", "Pyramids Visit"],
+        amenityIcons: [Building, Bus, Smartphone, Landmark],
+    },
+];
 const reviews = [
     {
         name: "Arlene McCoy",
@@ -326,18 +445,7 @@ const reviews = [
         text: "Booking the taxi was simple and the team contacted us quickly to confirm everything. The driver was friendly and the vehicle was modern",
     },
 ];
-import {
-    Calendar,
-    Users,
-    Hotel,
-    Phone,
-    User,
-    MessageCircle,
-    Landmark,
-    Ship,
-    Sun,
-    Crown
-} from "lucide-vue-next";
+
 import includeduicon from "@/assets/svgs/included.svg";
 import notincludeduicon from "@/assets/svgs/noincluded.svg";
 import looo from "@/assets/svgs/line.svg";
