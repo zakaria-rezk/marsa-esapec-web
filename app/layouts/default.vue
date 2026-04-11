@@ -77,7 +77,7 @@
     </nav>
     <slot></slot>
     <!-- Footer -->
-    <footer class="bg-background border-t border-border py-12 px-4">
+    <footer class="bg-background border-t border-border py-12 mt-10 px-4">
         <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8">
 
             <!-- Brand -->

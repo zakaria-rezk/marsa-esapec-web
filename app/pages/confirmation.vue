@@ -4,7 +4,7 @@
         <div class="max-w-4xl mx-auto px-4 pt-8">
 
             <!-- Breadcrumb -->
-            <nav class="flex items-center gap-2 text-sm text-muted-foreground mb-8">
+            <nav class="flex items-center gap-2 text-sm text-primary-foreground mb-8">
                 <RouterLink to="/" class="hover:text-foreground">
                     Home
                 </RouterLink>
@@ -25,12 +25,12 @@
                                 ? 'bg-primary text-primary-foreground'
                                 : step.active
                                     ? 'bg-secondary text-secondary-foreground'
-                                    : 'border-2 border-muted-foreground/30 text-muted-foreground'
+                                    : 'border-2 border-muted-foreground/30 text-primary-foreground'
                         ]">
                             <Check v-if="step.completed" class="w-4 h-4" />
                         </div>
 
-                        <span class="text-xs mt-2 text-muted-foreground">
+                        <span class="text-xs mt-2 text-primary-foreground">
                             {{ step.label }}
                         </span>
                     </div>
@@ -45,11 +45,11 @@
                     <CheckCircle class="w-12 h-12 text-green-500" />
                 </div>
 
-                <h1 class="text-2xl font-bold text-secondary mb-2">
+                <h1 class="text-2xl font-bold text-primary-foreground text mb-2">
                     Booking Request Sent Successfully
                 </h1>
 
-                <p class="text-muted-foreground text-sm text-center">
+                <p class="text-[#666666] text-sm text-center">
                     Thank You! our team will contact you shortly to confirm your trip details and pickup time.
                 </p>
             </div>
@@ -64,7 +64,7 @@
                 <div v-for="(item, i) in tripItems" :key="i"
                     class="flex items-center gap-3 py-3 border-b border-border last:border-b-0">
                     <CheckCircle class="w-4 h-4 text-primary/60" />
-                    <span class="text-sm text-foreground">{{ item }}</span>
+                    <span class="text-sm text-primary-foreground">{{ item }}</span>
                 </div>
 
                 <!-- Booking Info -->
@@ -74,10 +74,10 @@
 
                 <div v-for="(row, i) in bookingInfo" :key="i"
                     class="flex justify-between py-2.5 border-b border-border last:border-b-0">
-                    <span class="text-sm text-muted-foreground">
+                    <span class="text-sm text-primary-foreground">
                         {{ row[0] }}
                     </span>
-                    <span class="text-sm text-primary font-medium">
+                    <span class="text-sm text-primary-foreground font-medium">
                         {{ row[1] }}
                     </span>
                 </div>
@@ -92,8 +92,8 @@
             <!-- CTA -->
             <div class="flex justify-center pb-12">
                 <RouterLink to="/"
-                    class="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors">
-                    Build New Package
+                    class="bg-primary-danger text-white  px-8 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors">
+                    Book Another TOUR
                 </RouterLink>
             </div>
 

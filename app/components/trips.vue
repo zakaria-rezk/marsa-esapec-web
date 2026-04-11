@@ -11,24 +11,6 @@ import {
     CheckCircle,
 } from "lucide-vue-next";
 
-const services = [
-    {
-        title: "Taxi Transfers",
-        description:
-            "Comfortable private transfers from marsa alam airport to your hotel and trips between destinations.",
-        features: [
-            "Pick-Up From Marsa Alam Airport",
-            "Private & Group Rides",
-            "Easy Booking",
-        ],
-    },
-    {
-        title: "Tourist Internet SIM",
-        description:
-            "Stay connected during your trip with ready-to-use data packages delivered on arrival.",
-        features: ["Stay Connected In Egypt", "Fast Activation", "Tourist-Friendly Plans"],
-    },
-];
 
 const packages = [
     {
