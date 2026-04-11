@@ -20,14 +20,25 @@
 
         <!-- Desktop Links -->
         <div class="hidden md:flex items-center gap-8">
-            <a href="#" class="text-secondary font-semibold border-b-2 border-secondary pb-1">Home</a>
-            <a href="#" class="text-foreground hover:text-secondary transition-colors">Trips</a>
-            <a href="#" class="text-foreground hover:text-secondary transition-colors">Packages</a>
-            <a href="#" class="text-foreground hover:text-secondary transition-colors">Build Package</a>
-            <button class="flex items-center gap-1 text-foreground hover:text-secondary transition-colors">
-                Services
-                <ChevronDown class="w-4 h-4" />
-            </button>
+            <NuxtLink to="/" class="text-foreground hover:text-secondary transition-colors"
+                exact-active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Home
+            </NuxtLink>
+
+            <NuxtLink to="/trips" class="text-foreground hover:text-secondary transition-colors"
+                active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Trips
+            </NuxtLink>
+
+            <NuxtLink to="/packages" class="text-foreground hover:text-secondary transition-colors"
+                active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Packages
+            </NuxtLink>
+
+            <NuxtLink to="/build-package" class="text-foreground hover:text-secondary transition-colors"
+                active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Build Package
+            </NuxtLink>
         </div>
 
         <!-- Desktop Right -->

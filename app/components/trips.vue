@@ -1,5 +1,5 @@
 <script setup>
-import { getItems } from "~/services/trips";
+
 import {
     MapPin,
     Calendar,
@@ -11,6 +11,7 @@ import {
     Star,
     CheckCircle,
 } from "lucide-vue-next";
+import { getItems  } from "~/services/trips";
 onMounted(() => {
     getTrips()
 })
@@ -21,7 +22,7 @@ const getTrips = async () => {
         const trips = res.data?.data
 
         data.value = trips.slice(0, 3)
-
+       
         console.log(data.value)
     } catch (err) { }
 }

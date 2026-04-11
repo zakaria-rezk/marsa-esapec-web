@@ -1,11 +1,9 @@
 <template>
   <section class="py-16 md:py-24 px-4">
     <div class="max-w-3xl mx-auto">
-
       <h2 class="text-2xl md:text-4xl font-bold text-primary-foreground text-center mb-12">
         Frequently Asked Question
       </h2>
-
       <div class="space-y-4">
         <div v-for="(faq, i) in data" :key="i" class="border border-[#999999] rounded-xl transition-all duration-300">
           <!-- Question -->
@@ -13,11 +11,9 @@
             <span class="text-foreground text-sm md:text-base font-medium">
               {{ faq.question }}
             </span>
-
             <ChevronDown class="w-5 h-5 text-muted-foreground transition-transform duration-300"
               :class="{ 'rotate-180': activeIndex === i }" />
           </div>
-
           <!-- Answer -->
           <div v-show="activeIndex === i" class="px-6 pb-4 text-muted-foreground text-sm leading-relaxed">
             {{ faq.answer }}

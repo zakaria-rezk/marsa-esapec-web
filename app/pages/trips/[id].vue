@@ -15,10 +15,7 @@
                 <div>
                     <h2 class="text-2xl font-bold text-primary-foreground mb-3">Overview</h2>
                     <p class="text-[#666666] leading-relaxed">
-                        Experience the timeless beauty of luxor on a 3-day immersive journey through ancient
-                        temples, royal tombs, and authentic local life. from the majestic karnak temple to a magical
-                        sunrise hot air balloon ride, this tour blends history, adventure, and relaxation along the
-                        Nile.
+                        {{ data?.overview }}
                     </p>
                 </div>
 
@@ -27,24 +24,9 @@
                     <h2 class="text-2xl font-bold text-primary-foreground mb-4">Tour Highlights</h2>
 
                     <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-primary-foreground">
+                        <li class="flex items-center gap-3 text-primary-foreground" v-for="p in data?.places">
                             <Landmark class="w-5 h-5 text-[#666666]" />
-                            Karnak Temple Complex
-                        </li>
-
-                        <li class="flex items-center gap-3 text-primary-foreground">
-                            <Ship class="w-5 h-5 text-[#666666]" />
-                            Nile Felucca Ride
-                        </li>
-
-                        <li class="flex items-center gap-3 text-primary-foreground">
-                            <Sun class="w-5 h-5 text-[#666666]" />
-                            Hot Air Balloon at sunrise
-                        </li>
-
-                        <li class="flex items-center gap-3 text-primary-foreground">
-                            <Crown class="w-5 h-5 text-[#666666]" />
-                            Hatshepsut Temple
+                            {{ p }}
                         </li>
                     </ul>
                 </div>
@@ -54,50 +36,43 @@
                     <h2 class="text-2xl font-bold text-primary-foreground mb-6">Itinerary</h2>
 
                     <!-- Day 1 -->
-                    <div class="flex gap-4 mb-8">
+                    <div class="flex gap-4 mb-8" v-for="(d, index) in data?.days">
                         <div class="flex flex-col items-center">
                             <div
                                 class="w-8 h-8 rounded-full bg-[#5EA3D5] text-white flex items-center justify-center text-xs font-bold">
-                                01
+                                0 {{ ++index }}
                             </div>
 
                         </div>
 
                         <div>
-                            <h3 class="text-lg font-bold text-primary-foreground  mb-3">
-                                Day 1 – Arrival & East Bank Exploration
-                            </h3>
+
 
                             <p class="font-semibold text-primary-foreground mb-1">Morning:</p>
                             <ul class="text-[#666666] mb-3 space-y-1 text-sm">
-                                <li>• Meet & assist at luxor airport or train station</li>
-                                <li>• Private transfer to hotel – check-in</li>
-                                <li>• Lunch at a local restaurant</li>
+                                <li v-for="m in d?.morning">• {{ m }}</li>
+
                             </ul>
 
                             <p class="font-semibold text-primary-foreground italic mb-1">Afternoon Tour:</p>
                             <ul class="text-[#666666] mb-3 space-y-1 text-sm">
-                                <li>• explore karnak temple complex</li>
-                                <li>• visit luxor temple</li>
+                                <li v-for="f in d?.afternoon">• {{ f }}</li>
+
                             </ul>
 
                             <p class="font-semibold text-primary-foreground mb-1">Evening:</p>
-                            <ul class="text-[#666666] space-y-1 text-sm">
-                                <li>• free time or optional sound & light show at karnak</li>
-                                <li>• overnight in luxor</li>
+                            <ul class="text-[#666666] mb-3 space-y-1 text-sm">
+                                <li v-for="e in d?.evining">• {{ e }}</li>
+
                             </ul>
                         </div>
                     </div>
-
-
-
-
                     <div>
                         <!-- Included -->
                         <div>
                             <h2 class="text-2xl font-bold text-foreground mb-4">Included</h2>
                             <ul class="space-y-3">
-                                <li v-for="item in included" :key="item"
+                                <li v-for="item in data?.included" :key="item"
                                     class="flex items-center gap-3 text-foreground text-sm">
                                     <span
                                         class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">
@@ -112,7 +87,7 @@
                         <div class="mt-8">
                             <h2 class="text-2xl font-bold text-foreground mb-4">Not Included</h2>
                             <ul class="space-y-3">
-                                <li v-for="item in notIncluded" :key="item"
+                                <li v-for="item in data?.excluded" :key="item"
                                     class="flex items-center gap-3 text-foreground text-sm">
                                     <span
                                         class="w-5 h-5 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-xs">
@@ -130,75 +105,104 @@
             <div class="lg:col-span-2">
                 <div class="bg-background rounded-2xl shadow-lg p-6 sticky top-8">
 
-                    <h3 class="text-xl font-bold text-primary-foreground mb-1">Book This Tour</h3>
+                    <h3 class="text-xl font-bold text-primary-foreground mb-1">
+                        Book This Tour
+                    </h3>
 
                     <p class="mb-5">
                         <span class="text-[#666666]">From </span>
-                        <span class="text-primary-danger font-bold text-xl">$700</span>
+                        <span class="text-primary-danger font-bold text-xl">
+                            ${{ data?.price }}
+                        </span>
                         <span class="text-[#666666] text-sm"> /person</span>
                     </p>
 
-                    <h4 class="text-primary-foreground  font-bold mb-3">Trip Details</h4>
+                    <h4 class="text-primary-foreground font-bold mb-3">Trip Details</h4>
 
                     <!-- Date -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Date</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <Calendar class="w-5 h-5 text-[#666666]" />
-                        <span class="text-[#666666] text-sm flex-1">select date</span>
-                    </div>
+                    <label class="text-sm font-semibold mb-1 block">Date</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <Calendar class="w-5 h-5" />
+                        <input type="date" v-model="form.date" class="bg-transparent outline-none text-sm flex-1" />
 
-                    <!-- Guest -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Guest</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <Users class="w-5 h-5 text-[#666666]" />
-                        <span class="text-[#666666] text-sm flex-1">2 guest</span>
+
                     </div>
+                    <p v-if="errors.date" class="text-red-500 text-xs mt-1">
+                        {{ errors.date }}
+                    </p>
+
+                    <!-- Guests -->
+                    <label class="text-sm font-semibold mb-1 block">Guest</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <Users class="w-5 h-5" />
+                        <input type="number" min="1" v-model="form.peopleCount"
+                            class="bg-transparent outline-none text-sm flex-1" />
+                    </div>
+                    <p v-if="errors.peopleCount" class="text-red-500 text-xs mt-1">
+                        {{ errors.peopleCount }}
+                    </p>
 
                     <!-- Hotel -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Hotel</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <Hotel class="w-5 h-5 text-muted-foreground" />
-                        <input type="text" placeholder="Enter Your Hotel Name"
+                    <label class="text-sm font-semibold mb-1 block">Hotel</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <Hotel class="w-5 h-5" />
+                        <input v-model="form.hotel" type="text" placeholder="Enter Your Hotel Name"
                             class="bg-transparent outline-none text-sm flex-1" />
                     </div>
+                    <p v-if="errors.hotel" class="text-red-500 text-xs mt-1">
+                        {{ errors.hotel }}
+                    </p>
 
                     <!-- Room -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Room Number</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <Phone class="w-5 h-5 text-muted-foreground" />
-                        <input type="text" placeholder="Enter Your Room Number"
+                    <label class="text-sm font-semibold mb-1 block">Room Number</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <Phone class="w-5 h-5" />
+                        <input v-model="form.roomNumber" type="number" placeholder="Enter Your Room Number"
                             class="bg-transparent outline-none text-sm flex-1" />
                     </div>
+                    <p v-if="errors.roomNumber" class="text-red-500 text-xs mt-1">
+                        {{ errors.roomNumber }}
+                    </p>
 
                     <!-- Name -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Full Name</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <User class="w-5 h-5 text-muted-foreground" />
-                        <input type="text" placeholder="Enter your full name"
+                    <label class="text-sm font-semibold mb-1 block">Full Name</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <User class="w-5 h-5" />
+                        <input v-model="form.name" type="text" placeholder="Enter your full name"
                             class="bg-transparent outline-none text-sm flex-1" />
                     </div>
+                    <p v-if="errors.name" class="text-red-500 text-xs mt-1">
+                        {{ errors.name }}
+                    </p>
 
                     <!-- WhatsApp -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">WhatsApp Number</label>
-                    <div class="flex items-center gap-2 border border-[#999999] rounded-lg px-4 py-3 mb-4">
-                        <MessageCircle class="w-5 h-5 text-muted-foreground" />
-                        <input type="text" placeholder="Enter Your WhatsApp Number"
+                    <label class="text-sm font-semibold mb-1 block">WhatsApp Number</label>
+                    <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
+                        <MessageCircle class="w-5 h-5" />
+                        <input v-model="form.phone" type="text" placeholder="Enter Your WhatsApp Number"
                             class="bg-transparent outline-none text-sm flex-1" />
+
                     </div>
+                    <p v-if="errors.phone" class="text-red-500 text-xs mt-1">
+                        {{ errors.phone }}
+                    </p>
 
                     <!-- Special Request -->
-                    <label class="text-primary-foreground  font-semibold text-sm mb-1.5 block">Special Request</label>
-                    <textarea
-                        class="w-full border border-[#999999] rounded-lg px-4 py-3 mb-6 text-sm h-28 resize-none bg-transparent"></textarea>
+                    <label class="text-sm font-semibold mb-1 block">Special Request</label>
+                    <textarea v-model="form.specialRequest"
+                        class="w-full border rounded-lg px-4 py-3 mb-6 text-sm h-28 resize-none bg-transparent" />
 
                     <!-- Total -->
                     <div class="text-center mb-4">
                         <p class="text-[#666666] font-bold">Total Price</p>
-                        <p class="text-primary-danger font-bold text-2xl">$1400</p>
+                        <p class="text-primary-danger font-bold text-2xl">
+                            ${{ data?.price * form?.peopleCount }}
+                        </p>
                     </div>
 
                     <!-- Button -->
-                    <button class="w-full bg-primary-danger text-white font-semibold py-3 rounded-full">
+                    <button @click="submitBooking"
+                        class="w-full bg-primary-danger text-white font-semibold py-3 rounded-full hover:opacity-90 transition">
                         Request Booking
                     </button>
 
@@ -210,7 +214,7 @@
             </div>
 
         </div>
-        <div class="min-h-screen bg-background">
+        <div class="bg-background">
             <section class="py-12 md:py-20 px-4">
                 <div class="max-w-7xl mx-auto">
 
@@ -267,65 +271,109 @@
                 </div>
             </section>
         </div>
-        <section class="py-16 md:py-24 px-4">
-            <div class="max-w-3xl mx-auto">
 
-                <h2 class="text-2xl md:text-4xl font-bold text-primary-foreground text-center mb-12">
-                    Frequently Asked Question
-                </h2>
-
-                <div class="space-y-4">
-                    <div v-for="(faq, i) in faqs" :key="i"
-                        class="border border-border rounded-xl transition-all duration-300">
-                        <!-- Question -->
-                        <div @click="toggle(i)"
-                            class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-muted/50">
-                            <span class="text-foreground text-sm md:text-base font-medium">
-                                {{ faq.question }}
-                            </span>
-
-                            <ChevronDown class="w-5 h-5 text-muted-foreground transition-transform duration-300"
-                                :class="{ 'rotate-180': activeIndex === i }" />
-                        </div>
-
-                        <!-- Answer -->
-                        <div v-show="activeIndex === i" class="px-6 pb-4 text-muted-foreground text-sm leading-relaxed">
-                            {{ faq.answer }}
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
     </div>
 </template>
 
 
-<script setup>import { Star, CheckCheck } from "lucide-vue-next";
+<script setup>
+import { Star, CheckCheck } from "lucide-vue-next";
+import { addItem } from "@/services/trips"
+import { getItems } from "~/services/trips";
+import { useRoute } from "vue-router";
+const route = useRoute()
+onMounted(() => {
+    getTrips()
+})
+const data = ref();
+const form = reactive({
+    date: '',
+    peopleCount: 2,
+    hotel: '',
+    roomNumber: 143,
+    name: '',
+    phone: '',
+    specialRequest: ''
+});
+const errors = reactive({
+    date: '',
+    peopleCount: '',
+    hotel: '',
+    roomNumber: '',
+    name: '',
+    phone: ''
+});
+const validateForm = () => {
+    let isValid = true
 
-const reviews = [
-    {
-        name: "Arlene McCoy",
-        date: "2 October 2025",
-        rating: 4,
-        title: "Very Professional Service",
-        text: "Booking the taxi was simple and the team contacted us quickly to confirm everything. The driver was friendly and the vehicle was modern",
-    },
-    {
-        name: "Arlene McCoy",
-        date: "2 October 2025",
-        rating: 4,
-        title: "Very Professional Service",
-        text: "Booking the taxi was simple and the team contacted us quickly to confirm everything. The driver was friendly and the vehicle was modern",
-    },
-    {
-        name: "Arlene McCoy",
-        date: "2 October 2025",
-        rating: 4,
-        title: "Very Professional Service",
-        text: "Booking the taxi was simple and the team contacted us quickly to confirm everything. The driver was friendly and the vehicle was modern",
-    },
-];
+    // reset errors
+    Object.keys(errors).forEach((key) => {
+        errors[key] = ''
+    })
+
+    if (!form.date) {
+        errors.date = 'Date is required'
+        isValid = false
+    }
+
+    if (!form.peopleCount || form.peopleCount < 1) {
+        errors.peopleCount = 'At least 1 guest is required'
+        isValid = false
+    }
+
+    if (!form.hotel) {
+        errors.hotel = 'Hotel name is required'
+        isValid = false
+    }
+
+    if (!form.roomNumber) {
+        errors.roomNumber = 'Room number is required'
+        isValid = false
+    }
+
+    if (!form.name) {
+        errors.name = 'Full name is required'
+        isValid = false
+    }
+
+    if (!form.phone) {
+        errors.phone = 'WhatsApp number is required'
+        isValid = false
+    }
+
+    return isValid
+};
+import { useToast } from "@/composables/useToast";
+const { addToast } = useToast()
+const submitBooking = async () => {
+    console.log('Booking:', "payload")
+    console.log(validateForm())
+    if (!validateForm()) return
+    try {
+
+        const payload = {
+            tripId: +route.params?.id,
+            ...form,
+
+        }
+        await addItem('reservations', payload)
+        addToast('Booking Request Sent Successfully', 'success')
+        addToast('Thank you! Our team will contact you shortly to confirm your trip details and pickup time.', 'success')
+
+    } catch (er) {
+
+    }
+
+}
+const getTrips = async () => {
+    const id = route.params.id
+    try {
+        const res = await getItems(`trip/${id}`)
+        data.value = res.data
+        console.log(data.value)
+    } catch (err) { }
+}
+
 import {
     Calendar,
     Users,
@@ -340,54 +388,8 @@ import {
 } from "lucide-vue-next";
 import includeduicon from "@/assets/svgs/included.svg";
 import notincludeduicon from "@/assets/svgs/noincluded.svg";
-import looo from "@/assets/svgs/line.svg";
-const included = [
-    "2 Nights Accommodation (4★ Hotel)",
-    "Daily Breakfast",
-    "Professional Egyptologist Guide",
-    "All Transfers In A/C Vehicle",
-    "Felucca Ride",
-];
-const notIncluded = [
-    "Hot Air Balloon (Optional Add-On)",
-    "Sound & Light Show",
-    "Flights Or Train Tickets",
-    "Personal Expenses",
-    "Tips",
-]; import { ref } from "vue";
-import { ChevronDown } from "lucide-vue-next";
 
-const activeIndex = ref(null);
 
-const toggle = (index) => {
-    activeIndex.value = activeIndex.value === index ? null : index;
-};
 
-const faqs = [
-    {
-        question: "Where are the best places for snorkeling in Marsa Alam?",
-        answer:
-            "Some of the best snorkeling spots in Marsa Alam include Abu Dabbab Bay, Marsa Mubarak, and Sataya Reef. These locations offer crystal-clear water and rich marine life.",
-    },
-    {
-        question: "Do you provide airport transfer services?",
-        answer:
-            "Yes, we offer reliable taxi transfer services from and to Marsa Alam Airport with comfortable vehicles and professional drivers.",
-    },
-    {
-        question: "Can I customize my trip package?",
-        answer:
-            "Absolutely! You can fully customize your trip including activities, hotel, transportation, and special requests.",
-    },
-    {
-        question: "How can I book a trip?",
-        answer:
-            "You can book directly through our website by submitting a request form, or contact us via WhatsApp for quick assistance.",
-    },
-    {
-        question: "Is it safe to travel to Marsa Alam?",
-        answer:
-            "Yes, Marsa Alam is considered a safe destination for tourists, with well-managed resorts and secure travel services.",
-    },
-];
+
 </script>
