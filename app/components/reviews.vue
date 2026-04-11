@@ -17,27 +17,29 @@
             <h2 class="text-2xl md:text-4xl font-bold text-primary-foreground mb-12">
                 What Our Clients Are<br />Saying About Us?
             </h2>
-
             <!-- Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div v-for="(t, i) in testimonials" :key="i" class="border border-border rounded-xl p-6 text-left">
+                <div v-for="(t, i) in data" :key="i" class="border border-[#E6E6E6] rounded-xl p-6 text-left">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-muted-foreground/20" />
+                            <div
+                                class="w-10 bg-primary-foreground h-10 rounded-full flex items-center justify-center text-white font-semibold">
+                                {{ t.userName?.charAt(0).toUpperCase() }}
+                            </div>
                             <div>
-                                <p class="font-semibold text-primary-foreground text-sm">{{ t.name }}</p>
-                                <p class="text-primary-foreground text-xs">{{ t.location }}</p>
+                                <p class="font-semibold text-primary-foreground text-sm">{{ t.userName }}</p>
+
                             </div>
                         </div>
 
                         <!-- Stars -->
                         <div class="flex gap-0.5">
-                            <Star v-for="j in 5" :key="j" class="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <Star v-for="j in t.rating" :key="j" class="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         </div>
                     </div>
 
                     <p class="text-[#666666] text-sm leading-relaxed">
-                        {{ t.text }}
+                        {{ t.comment }}
                     </p>
                 </div>
             </div>
@@ -51,22 +53,22 @@
         </div>
     </section>
 </template>
-<script setup>import { Star  } from "lucide-vue-next";
+<script setup>
+import { Star } from "lucide-vue-next";
+import { getItems } from "~/services/trips";
 
-const testimonials = [
-    {
-        name: "Sara Mohamed",
-        location: "Jakatar",
-        text: "I Had An Amazing Experience With This Company. The Service Was Top-Notch, And The Staff Was Incredibly Friendly.",
-    },
-    {
-        name: "Sara Mohamed",
-        location: "Jakatar",
-        text: "I Had An Amazing Experience With This Company. The Service Was Top-Notch, And The Staff Was Incredibly Friendly.",
-    },
-    {
-        name: "Sara Mohamed",
-        location: "Jakatar",
-        text: "I Had An Amazing Experience With This Company. The Service Was Top-Notch, And The Staff Was Incredibly Friendly.",
-    },
-];</script>
+onMounted(() => {
+    getTrips()
+})
+const data = ref()
+const getTrips = async () => {
+    try {
+        const res = await getItems('trip-reviews')
+        const reviews = res.data?.data
+
+        data.value = reviews.slice(0, 3)
+
+
+    } catch (err) { }
+}
+</script>

@@ -1,5 +1,5 @@
 <template>
-    <section class="py-16  bg-background">
+    <section class="py-16 bg-background">
         <div class="max-w-6xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-primary-foreground text-center mb-4">
                 Our Packages
@@ -9,14 +9,15 @@
                 Stay, explore, and experience more with curated travel bundles that combine top destinations and
                 seamless planning.
             </p>
+
             <div class="grid md:grid-cols-3 gap-8">
-                <div v-for="(pkg, index) in packages" :key="index"
+                <div v-for="(pkg, index) in data" :key="index"
                     class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
                     <!-- IMAGE -->
                     <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
                         IMG
 
-                        <div
+                        <!-- <div
                             class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
                             <Star class="w-3 h-3 text-primary fill-primary" />
                             <span class="font-semibold text-foreground">
@@ -25,7 +26,7 @@
                             <span class="text-muted-foreground">
                                 ({{ pkg.reviews }} reviews)
                             </span>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="p-5">
@@ -35,12 +36,12 @@
 
                         <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
                             <MapPin class="w-3.5 h-3.5" />
-                            {{ pkg.location }}
+                            {{ pkg.places.join(' , ') }}
                         </div>
 
                         <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
                             <Calendar class="w-3.5 h-3.5" />
-                            {{ pkg.duration }}
+                            {{ pkg.days?.length + ' days' }}
                         </div>
 
                         <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
@@ -52,12 +53,12 @@
                                 </span>
                             </div>
                         </div>
-
+                       <span class="font-bold text-[#666666]">From</span> 
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
 
                                 <span class="text-primary-danger text-xl font-bold">
-                                    {{ pkg.price }}
+                                    {{ pkg.price + ' $' }}
                                 </span>
                                 <span class="text-border text-sm">/Person</span>
                             </div>
@@ -70,7 +71,8 @@
                 </div>
             </div>
             <div class="w-full  text-center my-10 ">
-                <nuxt-link to="/" class="font-medium rounded-xl  text-center border border-[#082852] border-5 p-3 ">
+                <nuxt-link to="/packages"
+                    class="font-medium rounded-xl  text-center border border-[#082852] border-5 p-3 ">
                     See all backages
                 </nuxt-link>
             </div>
@@ -140,41 +142,19 @@
 
 } from "lucide-vue-next";
 import bacakge from "@/assets/images/bacakge.png"
-const packages = [
-    {
-        title: "Marsa Alam 5-Day Explorer",
-        location: "Marsa Alam",
-        duration: "5 Days 4 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Sea Trips"],
-        amenityIcons: [Building, Bus, Smartphone, Ship],
-    },
-    {
-        title: "Marsa Alam & Luxor Combo – 6 Days",
-        location: "Marsa Alam, Luxor",
-        duration: "6 Days 5 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Temple Trips"],
-        amenityIcons: [Building, Bus, Smartphone, Landmark],
-    },
-    {
-        title: "Red Sea & Cairo Highlights – 7 Days",
-        location: "Marsa Alam, Cairo",
-        duration: "5 Days 4 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Pyramids Visit"],
-        amenityIcons: [Building, Bus, Smartphone, Landmark],
-    },
-];</script>
+import { getItems } from "~/services/trips";
+onMounted(() => {
+    getTrips()
+})
+const data = ref()
+const getTrips = async () => {
+    try {
+        const res = await getItems('trip')
+        const trips = res.data?.data
+
+        data.value = trips.filter(item => item.tripType?.id === 1)
+
+        console.log(data.value)
+    } catch (err) { }
+}
+</script>

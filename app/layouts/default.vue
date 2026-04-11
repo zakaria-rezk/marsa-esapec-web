@@ -93,15 +93,17 @@
                 </p>
 
                 <div class="flex gap-3">
-                    <div
-                        class="w-8 h-8 rounded-full border border-border flex items-center justify-center text-xs cursor-pointer hover:bg-muted">
-                        fb</div>
-                    <div
-                        class="w-8 h-8 rounded-full border border-border flex items-center justify-center text-xs cursor-pointer hover:bg-muted">
-                        tw</div>
-                    <div
-                        class="w-8 h-8 rounded-full border border-border flex items-center justify-center text-xs cursor-pointer hover:bg-muted">
-                        ig</div>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/share/1BtV7JnRvn/" target="_blank"
+                        class="w-8 h-8 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-muted">
+                        <Facebook class="w-4 h-4" />
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/marsaescapetours?igsh=MTJlcmczMmhpdGNoaA==" target="_blank"
+                        class="w-8 h-8 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-muted">
+                        <Instagram class="w-4 h-4" />
+                    </a>
                 </div>
             </div>
 
@@ -163,7 +165,9 @@
 </template>
 
 <script setup>
-import Logo from "@/assets/svgs/marsaescapelogo.svg"
+import Logo from "@/assets/svgs/marsaescapelogo.svg";
+import Facebook from "@/assets/svgs/facebook.svg"
+import Instagram from "@/assets/svgs/instagram.svg"
 import { ref } from 'vue'
 const open = ref(false);
 const quickLinks = ["Home", "Trips", "Services", "Package", "Plan Your Trip", "Contact Us"];

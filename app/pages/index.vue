@@ -61,7 +61,6 @@
         <package />
         <reviews />
         <faqs />
-        <faqs />
     </div>
 </template>
 

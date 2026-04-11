@@ -147,3 +147,7 @@ export const deleteFaq = async (url: string, id: number) => {
   const { $api } = useNuxtApp();
   return await $api.delete(`${url}/${id}`);
 };
+export async function getItems(url: string) {
+  const { $api } = useNuxtApp();
+  return await $api.get(`/${url}`);
+}

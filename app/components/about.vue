@@ -1,6 +1,6 @@
 <template>
     <section id="about-us" class="mt-10">
-        <div class="min-h-screen bg-background">
+        <div class=" bg-background">
             <!-- ABOUT SECTION -->
             <section class=" py-16 md:py-24 px-8">
                 <div
@@ -32,30 +32,6 @@
                     <!-- RIGHT IMAGE GRID -->
                     <div class="flex-1 relative flex justify-end">
                         <img :src="see" alt="">
-        
-                       <div
-                                class="w-56 h-64 md:w-64 md:h-72 bg-secondary/20 rounded-lg overflow-hidden shadow-lg z-10">
-                                <div
-                                    class="w-full h-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground text-xs">
-                                    IMG
-                                </div>
-                            </div>
-                         
-                            <div
-                                class="absolute bottom-0 left-1/4 lg:left-8 w-52 h-40 md:w-60 md:h-44 bg-secondary/20 rounded-lg overflow-hidden shadow-lg z-20 translate-y-4">
-                                <div
-                                    class="w-full h-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground text-xs">
-                                    IMG
-                                </div>
-                            </div>
-                         
-                            <div
-                                class="absolute top-8 -right-4 w-32 h-56 md:w-36 md:h-64 bg-secondary/20 rounded-lg overflow-hidden shadow-lg z-0 translate-x-4">
-                                <div
-                                    class="w-full h-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground text-xs">
-                                    IMG
-                                </div>
-                            </div>
                     </div>
                 </div>
             </section>
