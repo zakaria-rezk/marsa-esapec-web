@@ -10,66 +10,12 @@
                 seamless planning.
             </p>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div v-for="(pkg, index) in data" :key="index"
-                    class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
-                    <!-- IMAGE -->
-                    <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
-                        IMG
-
-                        <!-- <div
-                            class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
-                            <Star class="w-3 h-3 text-primary fill-primary" />
-                            <span class="font-semibold text-foreground">
-                                {{ pkg.rating }}
-                            </span>
-                            <span class="text-muted-foreground">
-                                ({{ pkg.reviews }} reviews)
-                            </span>
-                        </div> -->
-                    </div>
-
-                    <div class="p-5">
-                        <h3 class="text-base font-bold  mb-2 text-primary-foreground">
-                            {{ pkg.title }}
-                        </h3>
-
-                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
-                            <MapPin class="w-3.5 h-3.5" />
-                            {{ pkg.places.join(' , ') }}
-                        </div>
-
-                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
-                            <Calendar class="w-3.5 h-3.5" />
-                            {{ pkg.days?.length + ' days' }}
-                        </div>
-
-                        <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
-                            <div v-for="(amenity, i) in pkg.amenities" :key="i"
-                                class="flex flex-col items-center gap-1">
-                                <component :is="pkg.amenityIcons[i]" class="w-4 h-4 text-[#666666]" />
-                                <span class="text-[11px] text-[#666666]">
-                                    {{ amenity }}
-                                </span>
-                            </div>
-                        </div>
-                       <span class="font-bold text-[#666666]">From</span> 
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-
-                                <span class="text-primary-danger text-xl font-bold">
-                                    {{ pkg.price + ' $' }}
-                                </span>
-                                <span class="text-border text-sm">/Person</span>
-                            </div>
-                        </div>
-                        <button
-                            class="mt-4 bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                            View Package
-                        </button>
+        <UiCardLoader v-if="!data" />
+                <div class="grid md:grid-cols-3 gap-8" v-else>
+                    <div v-for="(trip, index) in data" :key="index" :trip="trip">
+                        <UiTripCard :trip="trip" />
                     </div>
                 </div>
-            </div>
             <div class="w-full  text-center my-10 ">
                 <nuxt-link to="/packages"
                     class="font-medium rounded-xl  text-center border border-[#082852] border-5 p-3 ">
@@ -106,7 +52,7 @@
                         </p>
 
                         <RouterLink to="#"
-                            class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-3xl mx-auto hover:bg-primary/90 transition-colors">
+                            class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-3xl mx-auto  transition-colors">
                             Let's Build Your Package
                         </RouterLink>
                     </div>
@@ -151,7 +97,8 @@ const getTrips = async () => {
     try {
         const res = await getItems('trip')
         const trips = res.data?.data
-
+          console.log(trips)
+          console.log(res.data)
         data.value = trips.filter(item => item.tripType?.id === 1)
 
         console.log(data.value)

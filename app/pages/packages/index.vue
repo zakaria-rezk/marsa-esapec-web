@@ -12,7 +12,7 @@
                     </h1>
                 </div>
             </section>
-            <div class="w-full absolute -mt-12 z-20 px-4">
+            <!-- <div class="w-full absolute -mt-12 z-20 px-4">
                 <div class="w-3/4 mx-auto ">
                     <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-end gap-6">
                         <div class="flex-1 w-full">
@@ -21,7 +21,7 @@
                                     class="flex w-full items-center gap-2 border border-border rounded-lg px-4 py-3">
                             </div>
                         </div>
-                        <!-- Search Button -->
+                 
                         <button
                             class="bg-primary-danger text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap">
                             <Search class="w-4 h-4" />
@@ -29,65 +29,68 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
-        <div class="grid md:grid-cols-3 gap-8 mt-20 py-10 lg:pt-20 pb-10 px-12">
-            <div v-for="(pkg, index) in packages" :key="index"
-                class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
-                <!-- IMAGE -->
-                <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
-                    IMG
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-3 mt-12 gap-8">
+                <div v-for="(pkg, index) in data" :key="index"
+                    class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
+                    <!-- IMAGE -->
+                    <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
+                        IMG {{ trips }}
 
-                    <div
-                        class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
-                        <Star class="w-3 h-3 text-primary fill-primary" />
-                        <span class="font-semibold text-foreground">
-                            {{ pkg.rating }}
-                        </span>
-                        <span class="text-muted-foreground">
-                            ({{ pkg.reviews }} reviews)
-                        </span>
-                    </div>
-                </div>
-
-                <div class="p-5">
-                    <h3 class="text-base font-bold  mb-2 text-primary-foreground">
-                        {{ pkg.title }}
-                    </h3>
-
-                    <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
-                        <MapPin class="w-3.5 h-3.5" />
-                        {{ pkg.location }}
-                    </div>
-
-                    <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
-                        <Calendar class="w-3.5 h-3.5" />
-                        {{ pkg.duration }}
-                    </div>
-
-                    <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
-                        <div v-for="(amenity, i) in pkg.amenities" :key="i" class="flex flex-col items-center gap-1">
-                            <component :is="pkg.amenityIcons[i]" class="w-4 h-4 text-[#666666]" />
-                            <span class="text-[11px] text-[#666666]">
-                                {{ amenity }}
+                        <!-- <div
+                            class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
+                            <Star class="w-3 h-3 text-primary fill-primary" />
+                            <span class="font-semibold text-foreground">
+                                {{ pkg.rating }}
                             </span>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-
-                            <span class="text-primary-danger text-xl font-bold">
-                                {{ pkg.price }}
+                            <span class="text-muted-foreground">
+                                ({{ pkg.reviews }} reviews)
                             </span>
-                            <span class="text-border text-sm">/Person</span>
-                        </div>
+                        </div> -->
                     </div>
-                    <button
-                        class="mt-4 bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                        View Package
-                    </button>
+
+                    <div class="p-5">
+                        <h3 class="text-base font-bold  mb-2 text-primary-foreground">
+                            {{ pkg.title }}
+                        </h3>
+
+                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
+                            <MapPin class="w-3.5 h-3.5" />
+                            {{ pkg.places.join(' , ') }}
+                        </div>
+
+                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
+                            <Calendar class="w-3.5 h-3.5" />
+                            {{ pkg.days?.length + ' days' }}
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
+                            <div v-for="(amenity, i) in pkg.amenities" :key="i"
+                                class="flex flex-col items-center gap-1">
+                                <component :is="pkg.amenityIcons[i]" class="w-4 h-4 text-[#666666]" />
+                                <span class="text-[11px] text-[#666666]">
+                                    {{ amenity }}
+                                </span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-[#666666]">From</span>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+
+                                <span class="text-primary-danger text-xl font-bold">
+                                    {{ pkg.price + ' $' }}
+                                </span>
+                                <span class="text-border text-sm">/Person</span>
+                            </div>
+                        </div>
+                        <NuxtLink :to="`/trips/${pkg?.id}`"
+                            class="mt-4 inline-block bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
+                            View Package
+                        </NuxtLink>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,7 +128,7 @@
 
                     <!-- Button -->
                     <NuxtLink to="/build-package"
-                        class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-full hover:bg-primary/90 transition-colors text-sm md:text-base">
+                        class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-full  transition-colors text-sm md:text-base">
                         Let's Build Your Package
                     </NuxtLink>
                 </div>
@@ -145,58 +148,26 @@ import packagesimg from "@/assets/images/packages.png"
 import {
     MapPin,
     Calendar,
-    Building,
-    Bus,
-    Smartphone,
-    Ship,
-    Landmark,
-    Star,
-    CheckCircle, BadgePercent, MessageSquare
+    BadgePercent, MessageSquare
 } from "lucide-vue-next";
 import buildbackage from "@/assets/images/buildpackage.png"
-
+import { getItems } from "~/services/trips";
 const steps = [
     { icon: Calendar, label: "Choose Number Of Days" },
     { icon: MapPin, label: "Pick Your Trips" },
     { icon: BadgePercent, label: "Get Instant Discount" },
     { icon: MessageSquare, label: "Send Booking Request" },
 ];
-const packages = [
-    {
-        title: "Marsa Alam 5-Day Explorer",
-        location: "Marsa Alam",
-        duration: "5 Days 4 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Sea Trips"],
-        amenityIcons: [Building, Bus, Smartphone, Ship],
-    },
-    {
-        title: "Marsa Alam & Luxor Combo – 6 Days",
-        location: "Marsa Alam, Luxor",
-        duration: "6 Days 5 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Temple Trips"],
-        amenityIcons: [Building, Bus, Smartphone, Landmark],
-    },
-    {
-        title: "Red Sea & Cairo Highlights – 7 Days",
-        location: "Marsa Alam, Cairo",
-        duration: "5 Days 4 Nights",
-        rating: 4.96,
-        reviews: 672,
-        discount: "-20% Off",
-        oldPrice: "$900",
-        price: "$750",
-        amenities: ["Hotel", "Transfer", "Tourist SIM", "Pyramids Visit"],
-        amenityIcons: [Building, Bus, Smartphone, Landmark],
-    },
-];
+onMounted(() => {
+    getTrips()
+})
+const data = ref()
+const getTrips = async () => {
+    try {
+        const res = await getItems('trip')
+        data.value = res.data?.data
+        data.value = trips.filter(item => item.tripType?.id === 1)
+
+    } catch (err) { }
+}
 </script>

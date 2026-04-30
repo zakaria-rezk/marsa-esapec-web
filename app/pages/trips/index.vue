@@ -99,13 +99,8 @@ import trips from "@/assets/images/concorde-moreen-beach 1.png"
 import {
     MapPin,
     Calendar,
-    Building,
-    Bus,
-    Smartphone,
-    Ship,
-    Landmark,
     Star,
-    CheckCircle,
+
 } from "lucide-vue-next";
 import { getItems } from "~/services/trips";
 onMounted(() => {
@@ -117,9 +112,6 @@ const getTrips = async () => {
         const res = await getItems('trip')
         data.value = res.data?.data
 
-
-
-        console.log(data.value)
     } catch (err) { }
 }
 </script>

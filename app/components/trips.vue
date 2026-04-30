@@ -11,18 +11,18 @@ import {
     Star,
     CheckCircle,
 } from "lucide-vue-next";
-import { getItems  } from "~/services/trips";
+import { getItems } from "~/services/trips";
 onMounted(() => {
     getTrips()
 })
-const data = ref()
+const data = ref(null)
 const getTrips = async () => {
     try {
         const res = await getItems('trip')
         const trips = res.data?.data
 
         data.value = trips.slice(0, 3)
-       
+
         console.log(data.value)
     } catch (err) { }
 }
@@ -43,59 +43,10 @@ const getTrips = async () => {
                     Discover the most exciting activities — from snorkeling and island trips to desert rides and
                     historical excursions.
                 </p>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div v-for="(trip, index) in data" :key="index"
-                        class="bg-background border border-[#999999]  rounded-2xl overflow-hidden shadow-sm">
-                        <!-- IMAGE -->
-                        <div class="relative h-56 bg-muted flex items-center justify-center text-[#999999]">
-                            IMG
-
-                            <span
-                                class="absolute top-3 left-3 bg-[#D1E3FA] text-black text-xs font-semibold px-3 py-1 rounded-full">
-                                {{ trip.discount }}
-                            </span>
-
-                            <div
-                                class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
-                                <Star class="w-3 h-3 text-primary fill-primary" />
-                                <span class="font-semibold text-foreground">
-                                    {{ trip.rating }}
-                                </span>
-                                <!-- <span class="text-[#999999]">
-                                    ({{ trip }} reviews)
-                                </span> -->
-                            </div>
-                        </div>
-
-                        <div class="p-5">
-                            <h3 class="text-base font-bold text-[#082852] mb-2">
-                                {{ trip.name }}
-                            </h3>
-
-                            <div class="flex items-center gap-1 text-[#999999] text-sm mb-1">
-                                <MapPin class="w-3.5 h-3.5" />
-                                {{ trip.places[0] }}
-                            </div>
-
-                            <div class="flex items-center gap-1 text-[#999999] text-sm mb-4">
-                                <Calendar class="w-3.5 h-3.5" />
-                                {{ trip?.days?.length + "days" }}
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-
-                                    <span class="text-primary-danger text-xl font-bold">
-                                        {{ trip.price + '$' }}
-                                    </span>
-                                    <span class="text-[#999999] text-sm">/Person</span>
-                                </div>
-                            </div>
-
-                            <button
-                                class="mt-4 bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                                View Details
-                            </button>
-                        </div>
+                <UiCardLoader v-if="!data" />
+                <div class="grid md:grid-cols-3 gap-8" v-else>
+                    <div v-for="(trip, index) in data" :key="index" :trip="trip">
+                        <UiTripCard :trip="trip" />
                     </div>
                 </div>
                 <div class="w-full  text-center my-10 ">
@@ -105,10 +56,6 @@ const getTrips = async () => {
                     </nuxt-link>
                 </div>
             </div>
-
         </section>
-
-
-
     </div>
 </template>

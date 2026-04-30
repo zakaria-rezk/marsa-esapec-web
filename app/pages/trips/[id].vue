@@ -218,12 +218,13 @@
             <section class="py-12 md:py-20 px-4">
                 <div class="max-w-7xl mx-auto">
 
-                    <h2 class="text-xl md:text-3xl font-bold text-secondary mb-8 md:mb-10">
+                    <h2 class="text-xl md:text-3xl font-bold text-primary-foreground mb-8 md:mb-10">
                         Reviews
                     </h2>
 
                     <div class="divide-y divide-border">
-                        <div v-for="(r, i) in reviews" :key="i" class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
+                        <div v-for="(r, i) in data?.reviews" :key="i"
+                            class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
                             <!-- Avatar -->
                             <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-muted-foreground/20 flex-shrink-0" />
 
@@ -242,10 +243,10 @@
 
                                     <!-- Name -->
                                     <div class="flex items-center gap-1.5">
-                                        <span class="text-sm font-semibold text-foreground">
-                                            {{ r.name }}
+                                        <span class="text-sm font-semibold text-[#666666]">
+                                            {{ r.userName }}
                                         </span>
-                                        <CheckCheck class="w-4 h-4 text-primary" />
+
                                     </div>
 
                                     <!-- Date -->
@@ -256,32 +257,119 @@
 
                                 <!-- Right -->
                                 <div class="flex-1">
-                                    <h3 class="font-bold text-secondary text-sm md:text-base mb-1">
-                                        {{ r.title }}
+                                    <h3 class="font-bold text-primary-foreground text-sm md:text-base mb-1">
+                                        {{ r.comment }}
                                     </h3>
-                                    <p class="text-muted-foreground text-sm leading-relaxed">
-                                        {{ r.text }}
-                                    </p>
+
                                 </div>
 
                             </div>
                         </div>
                     </div>
+                    <div class="max-w-7xl mx-auto">
 
+                        <h2 class="text-xl md:text-3xl font-bold text-primary-foreground  mb-4">
+                            Related tours
+                        </h2>
+                        <div class="grid md:grid-cols-3 gap-8  py-10 lg:pt-20 pb-10 px-12">
+                            <div v-for="(trip, index) in relatetTrips" :key="index"
+                                class="bg-background border border-[#999999]  rounded-2xl overflow-hidden shadow-sm">
+                                <!-- IMAGE -->
+                                <div class="relative h-56 bg-muted flex items-center justify-center text-[#999999]">
+                                    IMG
+
+                                    <span
+                                        class="absolute top-3 left-3 bg-[#D1E3FA] text-black text-xs font-semibold px-3 py-1 rounded-full">
+                                        {{ trip?.discount }}
+                                    </span>
+
+                                    <div
+                                        class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
+                                        <Star class="w-3 h-3 text-primary fill-primary" />
+                                        <span class="font-semibold text-foreground">
+                                            {{ trip?.rating }}
+                                        </span>
+                                        <!-- <span class="text-[#999999]">
+                                    ({{ trip }} reviews)
+                                </span> -->
+                                    </div>
+                                </div>
+
+                                <div class="p-5">
+                                    <h3 class="text-base font-bold text-[#082852] mb-2">
+                                        {{ trip?.name }}
+                                    </h3>
+
+                                    <div class="flex items-center gap-1 text-[#999999] text-sm mb-1">
+                                        <MapPin class="w-3.5 h-3.5" />
+                                        {{ trip?.places[0] }}
+                                    </div>
+
+                                    <div class="flex items-center gap-1 text-[#999999] text-sm mb-4">
+                                        <Calendar class="w-3.5 h-3.5" />
+                                        {{ trip?.days?.length + "days" }}
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+
+                                            <span class="text-primary-danger text-xl font-bold">
+                                                {{ trip?.price + '$' }}
+                                            </span>
+                                            <span class="text-[#999999] text-sm">/Person</span>
+                                        </div>
+                                    </div>
+                                    <NuxtLink :to="`/trips/${trip.id}`"
+                                        class="mt-4 inline-block bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
+                                        View Details
+                                    </NuxtLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
+        <section class="py-16 md:py-12 px-4">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl md:text-4xl font-bold text-primary-foreground  mb-12">
+                    Frequently Asked Question
+                </h2>
+                <div class="space-y-4">
+                    <div v-for="(faq, i) in faqs" :key="i"
+                        class="border border-[#999999] rounded-xl transition-all duration-300">
+                        <!-- Question -->
+                        <div @click="toggle(i)"
+                            class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-muted/50">
+                            <span class="text-foreground text-sm md:text-base font-medium">
+                                {{ faq.question }}
+                            </span>
+                            <ChevronDown class="w-5 h-5 text-muted-foreground transition-transform duration-300"
+                                :class="{ 'rotate-180': activeIndex === i }" />
+                        </div>
+                        <!-- Answer -->
+                        <div v-show="activeIndex === i" class="px-6 pb-4 text-muted-foreground text-sm leading-relaxed">
+                            {{ faq.answer }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
     </div>
 </template>
 
 
 <script setup>
-import { Star, CheckCheck } from "lucide-vue-next";
+import { Star, CheckCheck, ChevronDown } from "lucide-vue-next";
 import { addItem } from "@/services/trips"
 import { getItems } from "~/services/trips";
 import { useRoute } from "vue-router";
-const route = useRoute()
+const route = useRoute();
+const activeIndex = ref();
+const toggle = (index) => {
+  activeIndex.value = activeIndex.value === index ? null : index;
+};
 onMounted(() => {
     getTrips()
 })
@@ -365,12 +453,17 @@ const submitBooking = async () => {
     }
 
 }
+const relatetTrips = ref();
+const faqs = ref()
 const getTrips = async () => {
     const id = route.params.id
     try {
         const res = await getItems(`trip/${id}`)
         data.value = res.data
-        console.log(data.value)
+        const res2 = await getItems(`trip`)
+        relatetTrips.value = res2.data?.data?.splice(0, 3);
+        const res3 = await getItems(`faqs`);
+        faqs.value = res3.data
     } catch (err) { }
 }
 
@@ -382,9 +475,7 @@ import {
     User,
     MessageCircle,
     Landmark,
-    Ship,
-    Sun,
-    Crown
+
 } from "lucide-vue-next";
 import includeduicon from "@/assets/svgs/included.svg";
 import notincludeduicon from "@/assets/svgs/noincluded.svg";

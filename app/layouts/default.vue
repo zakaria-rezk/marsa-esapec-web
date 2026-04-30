@@ -35,7 +35,7 @@
                 Packages
             </NuxtLink>
 
-            <NuxtLink to="/build-package" class="text-foreground hover:text-secondary transition-colors"
+            <NuxtLink to="/buildpackage" class="text-foreground hover:text-secondary transition-colors"
                 active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
                 Build Package
             </NuxtLink>
