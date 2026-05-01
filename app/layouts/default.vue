@@ -165,7 +165,6 @@
                     </li>
                 </ul>
             </div>
-
             <!-- Contact -->
             <div>
                 <h4 class="font-semibold text-primary-foreground text-sm mb-4">Contact</h4>
@@ -179,7 +178,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
 
         <div class="max-w-6xl mx-auto mt-10 pt-6 border-t border-border text-center">

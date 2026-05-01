@@ -461,6 +461,7 @@ const form = reactive({
     roomNumber: 143,
     name: '',
     phone: '',
+    price: 0,
     specialRequest: ''
 });
 const errors = reactive({
@@ -521,6 +522,7 @@ const submitBooking = async () => {
         return
     }
     loading.value = true
+    form.price = total.value 
     try {
         const payload = {
             tripIds: selectedTripIds.value,
