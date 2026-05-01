@@ -82,19 +82,8 @@
                         <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4">
                             Taxi Gallery
                         </h2>
-
-                        <div class="grid grid-cols-4 grid-rows-2 gap-3 h-[320px] md:h-[400px]">
-                            <div class="col-span-2 row-span-2 bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="relative bg-muted rounded-xl overflow-hidden">
-                                <div class="absolute inset-0 bg-secondary/60 flex items-center justify-center">
-                                    <span class="text-secondary-foreground font-semibold text-sm md:text-base">
-                                        +45 Photos
-                                    </span>
-                                </div>
-                            </div>
+                        <div class="col-span-2 row-span-2 rounded-xl overflow-hidden">
+                            <img :src="taixpic" class="w-full h-full object-cover" />
                         </div>
                     </div>
                     <!-- RIGHT -->
@@ -186,7 +175,7 @@
                                                     @click="form.to = to; showTo = false"
                                                     class="flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors group">
                                                     <span class="text-sm font-medium group-hover:text-blue-600">{{ to
-                                                        }}</span>
+                                                    }}</span>
                                                     <Check v-if="form.to === to" class="w-4 h-4 text-blue-500" />
                                                 </div>
                                             </div>
@@ -434,12 +423,96 @@
                 </div>
             </div>
         </div>
+        <div class="bg-background">
+            <section class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="max-w-7xl mx-auto">
 
+                    <h2 class="text-xl md:text-3xl font-bold text-primary-foreground mb-8 md:mb-10">
+                        Reviews
+                    </h2>
 
+                    <div class="divide-y divide-border">
+
+                        <div v-for="r in reviews" :key="r.id" class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
+
+                            <!-- Avatar (Initials) -->
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground  text-white flex items-center justify-center font-bold flex-shrink-0">
+                                {{ r.userName?.trim()?.charAt(0)?.toUpperCase() || 'U' }}
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex flex-col md:flex-row gap-3 md:gap-6 w-full">
+
+                                <!-- Left -->
+                                <div class="md:w-44 flex-shrink-0">
+
+                                    <!-- Stars -->
+                                    <div class="flex gap-0.5 mb-1">
+                                        <Star v-for="j in 5" :key="j" class="w-3.5 h-3.5" :class="j <= r.rating
+                                            ? 'text-yellow-400 fill-yellow-400'
+                                            : 'text-muted-foreground/30'" />
+                                    </div>
+
+                                    <!-- Name -->
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-sm font-semibold text-[#666666]">
+                                            {{ r.userName }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Date -->
+                                    <p class="text-xs text-muted-foreground mt-0.5">
+                                        {{ r.date || 'Recently' }}
+                                    </p>
+                                </div>
+
+                                <!-- Right -->
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-primary-foreground text-sm md:text-base mb-1">
+                                        {{ r.comment }}
+                                    </h3>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+        <section class="py-16 md:py-12 px-4">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <h2 class="text-2xl md:text-4xl font-bold text-primary-foreground  mb-12">
+                    Frequently Asked Question
+                </h2>
+                <div class="space-y-4">
+                    <div v-for="(faq, i) in faqs" :key="i"
+                        class="border border-[#999999] rounded-xl transition-all duration-300">
+                        <!-- Question -->
+                        <div @click="toggle(i)"
+                            class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-muted/50">
+                            <span class="text-foreground text-sm md:text-base font-medium">
+                                {{ faq.question }}
+                            </span>
+                            <ChevronDown class="w-5 h-5 text-muted-foreground transition-transform duration-300"
+                                :class="{ 'rotate-180': activeIndex === i }" />
+                        </div>
+                        <!-- Answer -->
+                        <div v-show="activeIndex === i" class="px-6 pb-4 text-muted-foreground text-sm leading-relaxed">
+                            {{ faq.answer }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
     </div>
 </template>
 <script setup lang="ts">
 import taxiTransfer from "@/assets/images/taa.png";
+import taixpic from "@/assets/images/taixpic.png";
 import { getItems } from "~/services/trips";
 import { addItem } from "@/services/trips"
 import {
@@ -456,14 +529,21 @@ import {
     Phone, ChevronDown
 
 } from "lucide-vue-next"
-import { useToast } from "@/composables/useToast";
-const { addToast } = useToast()
+import { useToast } from "@/composables/useToast"; 
+import { useRoute, useRouter } from "vue-router";
+const route = useRoute();
+const router = useRouter()
+const { addToast } = useToast();
+const faqs = ref()
 const showFrom = ref(false);
 const showTo = ref(false);
 const data = ref([
 ]);
 const showVehicle = ref(false);
-
+const activeIndex = ref();
+const toggle = (index: number) => {
+    activeIndex.value = activeIndex.value === index ? null : index;
+};
 const vehicleOptions = [
     {
         id: 1,
@@ -491,6 +571,8 @@ const onFromChange = () => {
 };
 const simPackges = ref([
 ])
+const reviews = ref([
+])
 const getTrips = async () => {
 
     try {
@@ -502,7 +584,12 @@ const getTrips = async () => {
             capacity: item.capacity,
             price: item.price
         }))
-
+        const res3 = await getItems(`taxifaqs`);
+        faqs.value = res3.data;
+        const res4 = await getItems(`taxireviews`);
+        reviews.value = res4.data?.filter(
+            (r: any) => r.status === 'accepted'
+        )
     } catch (err) { }
 }
 onMounted(() => {
@@ -533,8 +620,6 @@ const selectedTrip = computed(() => {
             item.to === form.to
     );
 });
-
-
 const form = reactive({
     from: "",
     to: "",
@@ -620,6 +705,7 @@ const submitBooking = async () => {
         delete form.addSimCard
 
         const res = await addItem('taxibooking', form)
+        router.push(`/taxitransfer/confirmations/${res.data?.id}`)
         // router.push(`/trips/confirmations/${res.data?.id}`)
     }
     catch (err) {

@@ -232,8 +232,9 @@
 
                     <div class="divide-y divide-border">
 
-                        <div v-for="r in data?.reviews" :key="r.id"
-                            class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
+                        <div v-for="r in data?.reviews.filter(
+                            (r: any) => r.status === 'accepted'
+                        )" :key="r.id" class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
 
                             <!-- Avatar (Initials) -->
                             <div
