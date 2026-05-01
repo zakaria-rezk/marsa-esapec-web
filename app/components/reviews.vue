@@ -1,5 +1,5 @@
 <template>
-    <section class="px-4">
+    <section class="px-4" id="reviews">
         <div class="max-w-6xl mx-auto text-center">
 
             <!-- Avatars badge -->

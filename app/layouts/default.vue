@@ -130,34 +130,38 @@
             <div>
                 <h4 class="font-semibold text-primary-foreground text-sm mb-4">Quick Links</h4>
                 <ul class="space-y-2">
-                    <li v-for="l in quickLinks" :key="l">
-                        <a href="#" class="text-primary-foreground text-sm hover:text-foreground transition">
-                            {{ l }}
-                        </a>
+                    <li v-for="l in quickLinks" :key="l.name">
+                        <NuxtLink :to="l.path" class="text-primary-foreground text-sm hover:text-foreground transition">
+                            {{ l.name }}
+                        </NuxtLink>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-foreground text-sm mb-4">Services</h4>
+                <ul class="space-y-2">
+                    <li v-for="l in services" :key="l.name">
+                        <NuxtLink :to="l.path" class="text-primary-foreground text-sm hover:text-foreground transition">
+                            {{ l.name }}
+                        </NuxtLink>
                     </li>
                 </ul>
             </div>
 
-            <!-- Services -->
-            <div>
-                <h4 class="font-semibold text-foreground text-sm mb-4">Services</h4>
-                <ul class="space-y-2">
-                    <li v-for="l in services" :key="l">
-                        <a href="#" class="text-primary-foreground text-sm hover:text-foreground transition">
-                            {{ l }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+
+            <a href="https://wa.me/201055330883" target="_blank"
+                class="fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition">
+                <whatsapp class="w-6 h-6 text-white" />
+            </a>
 
             <!-- Support -->
             <div>
                 <h4 class="font-semibold text-primary-foreground text-sm mb-4">Support</h4>
                 <ul class="space-y-2">
-                    <li v-for="l in support" :key="l">
-                        <a href="#" class="text-primary-foreground text-sm hover:text-foreground transition">
-                            {{ l }}
-                        </a>
+                    <li v-for="l in support" :key="l.name">
+                        <NuxtLink :to="l.path" class="text-primary-foreground text-sm hover:text-foreground transition">
+                            {{ l.name }}
+                        </NuxtLink>
                     </li>
                 </ul>
             </div>
@@ -170,7 +174,8 @@
                         <MapPin class="w-4 h-4" /> Marsa Alam, Egypt
                     </li>
                     <li class="flex items-center gap-2 text-primary-foreground text-sm">
-                        <Phone class="w-4 h-4" /> 01055330883
+                        <Phone class="w-4 h-4" /> <a href="https://wa.me/201055330883" target="_blank">+20 105 533
+                            0883</a>
                     </li>
                 </ul>
             </div>
@@ -187,11 +192,28 @@
 import Logo from "@/assets/svgs/marsaescapelogo.svg";
 import Facebook from "@/assets/svgs/facebook.svg"
 import Instagram from "@/assets/svgs/instagram.svg"
+import whatsapp from "@/assets/svgs/whatsapp.svg"
 import { ref } from 'vue'
 const open = ref(false);
-const quickLinks = ["Home", "Trips", "Services", "Package", "Plan Your Trip", "Contact Us"];
-const services = ["Taxi Transfer", "Sim Card"];
-const support = ["FAQ", "Reviews", "Contact Us"];
+const quickLinks = [
+    { name: "Home", path: "/" },
+    { name: "Trips", path: "/trips" },
+    { name: "Services", path: "/#services" },
+    { name: "Package", path: "/packages" },
+    { name: "Plan Your Trip", path: "/buildpackage" },
+
+];
+
+const services = [
+    { name: "Taxi Transfer", path: "/taxitransfer" },
+    { name: "Sim Card", path: "/simservices" },
+];
+const support = [
+    { name: "FAQ", path: "/#faqs" },
+    { name: "Reviews", path: "/#reviews" },
+
+];
+
 </script>
 
 <style>
