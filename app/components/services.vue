@@ -33,10 +33,10 @@
                             </li>
                         </ul>
 
-                        <button
+                        <nuxt-link :to="service.to"
                             class="bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm w-fit hover:opacity-90 transition-opacity">
                             View Service
-                        </button>
+                        </nuxt-link>
                     </div>
                 </div>
             </div>
@@ -44,18 +44,21 @@
     </section>
 
 </template>
-<script setup>import {
+<script setup>
+import {
 
     CheckCircle,
 } from "lucide-vue-next";
 import taxitransfer from "@/assets/images/taxitransfer.png";
 import simservices from "@/assets/images/simservices.png"
+
 const services = [
     {
         title: "Taxi Transfers",
         description:
             "Comfortable private transfers from marsa alam airport to your hotel and trips between destinations.",
         img: taxitransfer,
+        to: "/taxitransfer",
         features: [
             "Pick-Up From Marsa Alam Airport",
             "Private & Group Rides",
@@ -67,6 +70,7 @@ const services = [
         description:
             "Stay connected during your trip with ready-to-use data packages delivered on arrival.",
         img: simservices,
+        to: "/simservices",
         features: ["Stay Connected In Egypt", "Fast Activation", "Tourist-Friendly Plans"],
     },
 ];
