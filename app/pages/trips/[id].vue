@@ -1,7 +1,18 @@
 <template>
 
     <div class="min-h-screen w-full bg-muted">
+   <div class="px-4 sm:px-8 lg:px-24 pt-8">
+            <nav class="flex items-center gap-2 text-sm text-primary-foreground mb-8">
+                <nuxt-link to="/" class="hover:text-foreground">
+                    Home
+                </nuxt-link>
 
+                <ChevronRight class="w-4 h-4" />
+                <span class="text-foreground font-medium">All Trips</span>
+                <ChevronRight class="w-4 h-4" />
+                <span class="text-foreground font-medium">Luxor Historical Tour</span>
+            </nav>
+        </div>
         <!-- Hero Image -->
         <div class="animate-in fade-in zoom-in duration-700 delay-300 fill-mode-both">
             <UiGallery :title="data?.name" :images="data?.images" />

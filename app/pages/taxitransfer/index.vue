@@ -112,7 +112,7 @@
 
                                     <!-- Toggle Button -->
                                     <button @click="showFrom = !showFrom" type="button"
-                                        class="w-full flex items-center justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-primary-danger focus:ring-4 focus:ring-primary-danger/10"
+                                        class="w-full flex items-center py-2 justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-primary-danger focus:ring-4 focus:ring-primary-danger/10"
                                         :class="{ 'border-primary-danger ring-4 ring-primary-danger/10': showFrom }">
                                         <div class="flex items-center gap-3">
                                             <MapPin class="w-5 h-5 text-primary-danger" />
@@ -154,7 +154,7 @@
                                     </label>
 
                                     <button @click="showTo = !showTo" type="button" :disabled="!form.from"
-                                        class="w-full flex items-center justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                                        class="w-full flex items-center py-2 justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                                         :class="{ 'border-blue-500 ring-4 ring-blue-500/10': showTo }">
                                         <div class="flex items-center gap-3">
                                             <Navigation class="w-5 h-5 text-blue-500" />
@@ -175,7 +175,7 @@
                                                     @click="form.to = to; showTo = false"
                                                     class="flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors group">
                                                     <span class="text-sm font-medium group-hover:text-blue-600">{{ to
-                                                    }}</span>
+                                                        }}</span>
                                                     <Check v-if="form.to === to" class="w-4 h-4 text-blue-500" />
                                                 </div>
                                             </div>
@@ -217,7 +217,7 @@
 
                                 <!-- Dropdown Trigger -->
                                 <button @click="showVehicle = !showVehicle" type="button"
-                                    class="w-full flex items-center justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-primary-danger focus:ring-4 focus:ring-primary-danger/10"
+                                    class="w-full flex items-center py-2 justify-between bg-white border-2 border-border rounded-xl px-4 py-3.5 transition-all duration-300 hover:border-primary-danger focus:ring-4 focus:ring-primary-danger/10"
                                     :class="{ 'border-primary-danger ring-4 ring-primary-danger/10': showVehicle }">
                                     <div class="flex items-center gap-3">
                                         <Car class="w-5 h-5 text-primary-danger" />
@@ -349,20 +349,16 @@
                                                         Data Package
                                                     </label>
                                                     <div class="relative">
-                                                        <select v-model="form.simCapacity"
+                                                        <select v-model="form.simPackage"
                                                             class="w-full bg-white border border-border rounded-lg pl-4 pr-10 py-2.5 appearance-none focus:border-primary-danger focus:ring-2 focus:ring-primary-danger/10 outline-none text-sm font-medium transition-all">
                                                             <option value="" disabled>Choose a plan</option>
-                                                            <option :value="item?.capacity" v-for="item in simPackges">
-                                                                {{
-                                                                    item?.capacity }}</option>
-
+                                                            <option value="5gb">5 GB Plan</option>
+                                                            <option value="10gb">10 GB Plan</option>
+                                                            <option value="unlimited">Unlimited Data</option>
                                                         </select>
                                                         <ChevronDown
                                                             class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                                                     </div>
-                                                    <p v-if="errors.simCapacity" class="text-red-500 text-xs mt-1">
-                                                        {{ errors.simCapacity }}
-                                                    </p>
                                                 </div>
 
                                                 <!-- SIM Counter -->
@@ -373,22 +369,18 @@
                                                     </label>
                                                     <div
                                                         class="flex items-center h-[42px] border border-border rounded-lg bg-white overflow-hidden focus-within:border-primary-danger transition-colors">
-                                                        <button
-                                                            @click.stop="form.simCards > 1 ? form.simCards-- : form.simCards = 1"
+                                                        <button @click.stop=""
                                                             type="button"
                                                             class="w-12 h-full flex items-center justify-center hover:bg-gray-50 text-primary-danger font-bold transition-colors border-r">
                                                             -
                                                         </button>
-                                                        <input v-model.number="form.simCards" type="number" :min="1"
+                                                        <input v-model.number="form.simCount" type="number" readonly
                                                             class="flex-1 w-full text-center text-sm font-bold bg-transparent focus:outline-none" />
-                                                        <button @click.stop="form.simCards++" type="button"
+                                                        <button @click.stop="form.simCount++" type="button"
                                                             class="w-12 h-full flex items-center justify-center hover:bg-gray-50 text-primary-danger font-bold transition-colors border-l">
                                                             +
                                                         </button>
                                                     </div>
-                                                    <p v-if="errors.simCards" class="text-red-500 text-xs mt-1">
-                                                        {{ errors.simCards }}
-                                                    </p>
                                                 </div>
 
                                             </div>
@@ -529,7 +521,7 @@ import {
     Phone, ChevronDown
 
 } from "lucide-vue-next"
-import { useToast } from "@/composables/useToast"; 
+import { useToast } from "@/composables/useToast";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter()

@@ -2,7 +2,18 @@
 
     <div class="min-h-screen w-full bg-muted">
 
-        <!-- Hero Image -->
+        <div class="px-4 sm:px-8 lg:px-24 pt-8">
+            <nav class="flex items-center gap-2 text-sm text-primary-foreground mb-8">
+                <nuxt-link to="/" class="hover:text-foreground">
+                    Home
+                </nuxt-link>
+
+                <ChevronRight class="w-4 h-4" />
+                <span class="text-foreground font-medium">All Trips</span>
+                <ChevronRight class="w-4 h-4" />
+                <span class="text-foreground font-medium">Luxor Historical Tour</span>
+            </nav>
+        </div>
         <div class="w-full h-[350px] bg-secondary/80" />
 
         <!-- Content -->

@@ -39,6 +39,14 @@
                 active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
                 Build Package
             </NuxtLink>
+            <NuxtLink to="/taxitransfer" class="text-foreground hover:text-secondary transition-colors"
+                active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Taxi Transfers
+            </NuxtLink>
+            <NuxtLink to="/simservices" class="text-foreground hover:text-secondary transition-colors"
+                active-class="text-secondary font-semibold border-b-2 border-secondary pb-1">
+                Tourist Internet SIM
+            </NuxtLink>
         </div>
 
         <!-- Desktop Right -->
