@@ -41,7 +41,7 @@
                         <span class="text-[#999999] text-sm">/Person</span>
                     </div>
                 </div>
-                <button
+                <button @click="goToTrip(trip.id)"
                     class="mt-4 bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
                     View Details
                 </button>
@@ -50,8 +50,15 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const goToTrip = (id: number) => {
+    router.push(`/trips/${id}`)
+}
 interface Porps {
     trip: {
+        id: number,
+        immages: { url: string }[],
         name: string,
         price: number,
         rating: number,

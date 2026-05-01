@@ -6,13 +6,13 @@
             <section
                 class="relative h-[70vh] min-h-[500px] text-white flex items-center justify-center overflow-hidden">
                 <div class="absolute inset-0 bg-secondary/90"></div>
-                <div class="relative z-10 text-center px-4 max-w-3xl">
+                <div class="relative z-10 text-center px-4 max-w-3xl animate-in slide-in-from-bottom-8">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold -tight mb-6">
                         Our Packages
                     </h1>
                 </div>
             </section>
-            <!-- <div class="w-full absolute -mt-12 z-20 px-4">
+            <div class="w-full absolute -mt-12 z-20 px-4">
                 <div class="w-3/4 mx-auto ">
                     <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-end gap-6">
                         <div class="flex-1 w-full">
@@ -21,7 +21,7 @@
                                     class="flex w-full items-center gap-2 border border-border rounded-lg px-4 py-3">
                             </div>
                         </div>
-                 
+
                         <button
                             class="bg-primary-danger text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap">
                             <Search class="w-4 h-4" />
@@ -29,76 +29,29 @@
                         </button>
                     </div>
                 </div>
-            </div> -->
-
-        </div>
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-3 mt-12 gap-8">
-                <div v-for="(pkg, index) in data" :key="index"
-                    class="bg-background border border-border rounded-2xl overflow-hidden shadow-sm">
-                    <!-- IMAGE -->
-                    <div class="relative h-56 bg-muted flex items-center justify-center text-muted-foreground">
-                        IMG {{ trips }}
-
-                        <!-- <div
-                            class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
-                            <Star class="w-3 h-3 text-primary fill-primary" />
-                            <span class="font-semibold text-foreground">
-                                {{ pkg.rating }}
-                            </span>
-                            <span class="text-muted-foreground">
-                                ({{ pkg.reviews }} reviews)
-                            </span>
-                        </div> -->
-                    </div>
-
-                    <div class="p-5">
-                        <h3 class="text-base font-bold  mb-2 text-primary-foreground">
-                            {{ pkg.title }}
-                        </h3>
-
-                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-1">
-                            <MapPin class="w-3.5 h-3.5" />
-                            {{ pkg.places.join(' , ') }}
-                        </div>
-
-                        <div class="flex items-center gap-1 text-[#666666] text-sm mb-4">
-                            <Calendar class="w-3.5 h-3.5" />
-                            {{ pkg.days?.length + ' days' }}
-                        </div>
-
-                        <div class="flex items-center justify-between border-t border-border pt-4 mb-4">
-                            <div v-for="(amenity, i) in pkg.amenities" :key="i"
-                                class="flex flex-col items-center gap-1">
-                                <component :is="pkg.amenityIcons[i]" class="w-4 h-4 text-[#666666]" />
-                                <span class="text-[11px] text-[#666666]">
-                                    {{ amenity }}
-                                </span>
-                            </div>
-                        </div>
-                        <span class="font-bold text-[#666666]">From</span>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-
-                                <span class="text-primary-danger text-xl font-bold">
-                                    {{ pkg.price + ' $' }}
-                                </span>
-                                <span class="text-border text-sm">/Person</span>
-                            </div>
-                        </div>
-                        <NuxtLink :to="`/trips/${pkg?.id}`"
-                            class="mt-4 inline-block bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                            View Package
-                        </NuxtLink>
-                    </div>
-                </div>
             </div>
         </div>
-        <div class="w-full text-center my-10">
-            <nuxt-link to="/" class="font-medium rounded-xl  text-center border border-[#082852] border-5 p-3 ">
-                load more
-            </nuxt-link>
-        </div>
+            <UiCardLoader v-if="loading" />
+            <!-- Data exists -->
+            <div v-else-if="data?.length" class="grid md:grid-cols-3 gap-8 mt-20 py-10 lg:pt-20 pb-10 px-12">
+                <UiTripCard v-for="(trip, index) in data" :key="trip.id || index" :trip="trip" />
+            </div>
+            <!-- Empty state -->
+            <div v-else class="flex flex-col items-center justify-center py-20 text-center">
+                <p class="text-lg font-semibold text-muted-foreground">
+                    No trips found
+                </p>
+                <p class="text-sm text-muted-foreground mt-2">
+                    Try adjusting your search or filters
+                </p>
+            </div>
+            <div class="w-full text-center my-10">
+                <button @click="getTrips(search, data.length + 10)"
+                    class="font-medium rounded-xl  text-center border border-[#082852] border-5 p-3 ">
+                    load more
+                </button>
+            </div>
+        
         <section class="w-full border-1 border-border rounded-2xl my-12 py-12 md:py-16 px-6 md:px-12 lg:px-16">
             <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
@@ -127,7 +80,7 @@
                     </div>
 
                     <!-- Button -->
-                    <NuxtLink to="/build-package"
+                    <NuxtLink to="/buildpackage"
                         class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-full  transition-colors text-sm md:text-base">
                         Let's Build Your Package
                     </NuxtLink>
@@ -166,7 +119,7 @@ const getTrips = async () => {
     try {
         const res = await getItems('trip')
         data.value = res.data?.data
-        data.value = trips.filter(item => item.tripType?.id === 1)
+        data.value = data.value.filter(item => item.tripType?.id === 1)
 
     } catch (err) { }
 }

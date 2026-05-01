@@ -51,10 +51,10 @@
                             minutes.
                         </p>
 
-                        <RouterLink to="#"
+                        <nuxt-link to="/"
                             class="inline-block bg-primary-danger text-white font-semibold px-8 py-3 rounded-3xl mx-auto  transition-colors">
                             Let's Build Your Package
-                        </RouterLink>
+                        </nuxt-link>
                     </div>
 
                     <!-- RIGHT IMAGES -->

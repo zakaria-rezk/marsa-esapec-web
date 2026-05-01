@@ -3,57 +3,40 @@
         <div id="hero" class=" w-full bg-hero bg-cover bg-no-repeat bg-center "
             :style="{ backgroundImage: `url(${hero})` }">
 
-            <section
-                class="relative h-[70vh] min-h-[500px] text-white flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 bg-secondary/90"></div>
-                <div class="relative z-10 text-center px-4 max-w-3xl">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold -tight mb-6">
-                        Discover Unforgettable Adventures In Marsa Alam & Beyond
-                    </h1>
-                    <p class=" text-base md:text-lg mb-8 max-w-xl mx-auto">
-                        Pack your bags and let us redefine your travel experience. Where every journey is a story
-                        waiting to
-                        be told
-                    </p>
-                    <button
-                        class="bg-white text-[#082852] font-semibold px-8 py-3 rounded-lg hover:bg-muted transition-colors text-base">
-                        Explore Trips
-                    </button>
-                </div>
-            </section>
-            <div class="w-full absolute -mt-12 z-20 px-4">
-                <div class="w-3/4 mx-auto ">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-end gap-6">
+            <div id="hero" class="w-full bg-cover bg-no-repeat bg-center overflow-hidden"
+                :style="{ backgroundImage: `url(${hero})` }">
 
-                        <!-- Date -->
-                        <div class="flex-1 w-full">
-                            <label class="text-foreground font-semibold text-sm mb-2 block">Date</label>
-                            <div class="flex items-center gap-2 border border-border rounded-lg px-4 py-3">
-                                <Calendar class="w-5 h-5 text-muted-foreground" />
-                                <span class="text-muted-foreground text-sm flex-1">select date</span>
-                                <ChevronDown class="w-4 h-4 text-muted-foreground" />
-                            </div>
+                <section class="relative h-[70vh] min-h-[500px] text-white flex items-center justify-center">
+
+                    <!-- Animated Overlay -->
+                    <div class="absolute inset-0 bg-secondary/80 animate-fade-in"></div>
+
+                    <div class="relative z-10 text-center px-4 max-w-4xl">
+                        <!-- Main Heading: Staggered Slide Up -->
+                        <h1
+                            class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 opacity-0 animate-slide-up">
+                            Discover <span class="text-blue-200">Unforgettable</span> Adventures In Marsa Alam & Beyond
+                        </h1>
+
+                        <!-- Subtext: Delayed Fade In -->
+                        <p class="text-base md:text-lg mb-8 max-w-xl mx-auto opacity-0 animate-slide-up-delayed">
+                            Pack your bags and let us redefine your travel experience. Where every journey is a story
+                            waiting to be told.
+                        </p>
+
+                        <!-- Button: Scale and Bounce effect -->
+                        <div class="opacity-0 animate-pop-in">
+                            <button @click="router.push('/trips')"
+                                class="group bg-white text-[#082852] font-semibold px-8 py-3 rounded-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 text-base flex items-center gap-2 mx-auto">
+                                Explore Trips
+                                <span
+                                    class="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
                         </div>
-
-                        <!-- Guest -->
-                        <div class="flex-1 w-full">
-                            <label class="text-foreground font-semibold text-sm mb-2 block">Guest</label>
-                            <div class="flex items-center gap-2 border border-border rounded-lg px-4 py-3">
-                                <Users class="w-5 h-5 text-muted-foreground" />
-                                <span class="text-muted-foreground text-sm flex-1">2 guest</span>
-                                <ChevronDown class="w-4 h-4 text-muted-foreground" />
-                            </div>
-                        </div>
-
-                        <!-- Search Button -->
-                        <button
-                            class="bg-primary-danger text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap">
-                            <Search class="w-4 h-4" />
-                            Search
-                        </button>
                     </div>
-                </div>
+                </section>
             </div>
+           
         </div>
         <about />
         <trips />
@@ -68,6 +51,8 @@
 import { Calendar, Users, Search, ChevronDown, Globe, CheckCircle } from "lucide-vue-next";
 import hero from "../../public/camels-walking-each-other-diani-beach-kenya 1.png"
 
+import { useRouter } from "vue-router";
+const router = useRouter();
 const features = [
     "All-in-one travel services",
     "Easy communication via WhatsApp",
@@ -75,3 +60,57 @@ const features = [
     "Flexible cash payment",
 ];
 </script>
+<style scoped>
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Custom Utility Classes */
+.animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up-delayed {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+.animate-pop-in {
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.4s;
+}
+
+.animate-fade-in {
+    animation: fadeIn 1.2s ease-out forwards;
+}
+</style>

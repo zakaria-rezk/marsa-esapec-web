@@ -1,10 +1,11 @@
 <template>
-    <div></div>
+
     <div class="min-h-screen w-full bg-muted">
 
         <!-- Hero Image -->
-        <div class="w-full h-[350px] bg-secondary/80" />
-
+        <div class="animate-in fade-in zoom-in duration-700 delay-300 fill-mode-both">
+            <UiGallery :title="data?.name" :images="data?.images" />
+        </div>
         <!-- Content -->
         <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-5 gap-8">
 
@@ -103,7 +104,7 @@
 
             <!-- Right -->
             <div class="lg:col-span-2">
-                <div class="bg-background rounded-2xl shadow-lg p-6 sticky top-8">
+                <div class="bg-background text-primary-foreground rounded-2xl shadow-lg p-6 sticky top-8">
 
                     <h3 class="text-xl font-bold text-primary-foreground mb-1">
                         Book This Tour
@@ -143,7 +144,7 @@
                     </p>
 
                     <!-- Hotel -->
-                    <label class="text-sm font-semibold mb-1 block">Hotel</label>
+                    <label class="text-sm font-semibold text-primary-foreground mb-1 block">Hotel</label>
                     <div class="flex items-center gap-2 border rounded-lg px-4 py-3 mb-4">
                         <Hotel class="w-5 h-5" />
                         <input v-model="form.hotel" type="text" placeholder="Enter Your Hotel Name"
@@ -201,11 +202,18 @@
                     </div>
 
                     <!-- Button -->
-                    <button @click="submitBooking"
-                        class="w-full bg-primary-danger text-white font-semibold py-3 rounded-full hover:opacity-90 transition">
-                        Request Booking
-                    </button>
+                    <button @click="submitBooking" :disabled="loading"
+                        class="w-full bg-primary-danger text-white font-semibold py-3 rounded-full transition flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:opacity-90">
+                        <svg v-if="loading" class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                        </svg>
 
+                        <span>
+                            {{ loading ? 'Processing...' : 'Request Booking' }}
+                        </span>
+                    </button>
                     <p class="text-[#666666] text-xs text-center mt-3">
                         This is a booking request. our team will contact you to confirm availability.
                     </p>
@@ -223,12 +231,17 @@
                     </h2>
 
                     <div class="divide-y divide-border">
-                        <div v-for="(r, i) in data?.reviews" :key="i"
-                            class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
-                            <!-- Avatar -->
-                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-muted-foreground/20 flex-shrink-0" />
 
-                            <!-- Content Wrapper -->
+                        <div v-for="r in data?.reviews" :key="r.id"
+                            class="py-6 flex flex-col md:flex-row gap-4 md:gap-6">
+
+                            <!-- Avatar (Initials) -->
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground  text-white flex items-center justify-center font-bold flex-shrink-0">
+                                {{ r.userName?.trim()?.charAt(0)?.toUpperCase() || 'U' }}
+                            </div>
+
+                            <!-- Content -->
                             <div class="flex flex-col md:flex-row gap-3 md:gap-6 w-full">
 
                                 <!-- Left -->
@@ -237,8 +250,8 @@
                                     <!-- Stars -->
                                     <div class="flex gap-0.5 mb-1">
                                         <Star v-for="j in 5" :key="j" class="w-3.5 h-3.5" :class="j <= r.rating
-                                            ? 'text-yellow-400 fill-current'
-                                            : 'text-muted-foreground/30'" fill="currentColor" />
+                                            ? 'text-yellow-400 fill-yellow-400'
+                                            : 'text-muted-foreground/30'" />
                                     </div>
 
                                     <!-- Name -->
@@ -246,12 +259,11 @@
                                         <span class="text-sm font-semibold text-[#666666]">
                                             {{ r.userName }}
                                         </span>
-
                                     </div>
 
                                     <!-- Date -->
                                     <p class="text-xs text-muted-foreground mt-0.5">
-                                        {{ r.date }}
+                                        {{ r.date || 'Recently' }}
                                     </p>
                                 </div>
 
@@ -260,69 +272,21 @@
                                     <h3 class="font-bold text-primary-foreground text-sm md:text-base mb-1">
                                         {{ r.comment }}
                                     </h3>
-
                                 </div>
 
                             </div>
                         </div>
+
                     </div>
                     <div class="max-w-7xl mx-auto">
 
                         <h2 class="text-xl md:text-3xl font-bold text-primary-foreground  mb-4">
                             Related tours
                         </h2>
-                        <div class="grid md:grid-cols-3 gap-8  py-10 lg:pt-20 pb-10 px-12">
-                            <div v-for="(trip, index) in relatetTrips" :key="index"
-                                class="bg-background border border-[#999999]  rounded-2xl overflow-hidden shadow-sm">
-                                <!-- IMAGE -->
-                                <div class="relative h-56 bg-muted flex items-center justify-center text-[#999999]">
-                                    IMG
-
-                                    <span
-                                        class="absolute top-3 left-3 bg-[#D1E3FA] text-black text-xs font-semibold px-3 py-1 rounded-full">
-                                        {{ trip?.discount }}
-                                    </span>
-
-                                    <div
-                                        class="absolute bottom-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 text-xs shadow">
-                                        <Star class="w-3 h-3 text-primary fill-primary" />
-                                        <span class="font-semibold text-foreground">
-                                            {{ trip?.rating }}
-                                        </span>
-                                        <!-- <span class="text-[#999999]">
-                                    ({{ trip }} reviews)
-                                </span> -->
-                                    </div>
-                                </div>
-
-                                <div class="p-5">
-                                    <h3 class="text-base font-bold text-[#082852] mb-2">
-                                        {{ trip?.name }}
-                                    </h3>
-
-                                    <div class="flex items-center gap-1 text-[#999999] text-sm mb-1">
-                                        <MapPin class="w-3.5 h-3.5" />
-                                        {{ trip?.places[0] }}
-                                    </div>
-
-                                    <div class="flex items-center gap-1 text-[#999999] text-sm mb-4">
-                                        <Calendar class="w-3.5 h-3.5" />
-                                        {{ trip?.days?.length + "days" }}
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-
-                                            <span class="text-primary-danger text-xl font-bold">
-                                                {{ trip?.price + '$' }}
-                                            </span>
-                                            <span class="text-[#999999] text-sm">/Person</span>
-                                        </div>
-                                    </div>
-                                    <NuxtLink :to="`/trips/${trip.id}`"
-                                        class="mt-4 inline-block bg-primary-danger text-white font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
-                                        View Details
-                                    </NuxtLink>
-                                </div>
+                        <UiCardLoader v-if="!data" />
+                        <div class="grid md:grid-cols-3 gap-8" v-else>
+                            <div v-for="(trip, index) in relatetTrips" :key="index" :trip="trip">
+                                <UiTripCard :trip="trip" />
                             </div>
                         </div>
                     </div>
@@ -364,11 +328,13 @@
 import { Star, CheckCheck, ChevronDown } from "lucide-vue-next";
 import { addItem } from "@/services/trips"
 import { getItems } from "~/services/trips";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
+const router = useRouter();
+const loading = ref(false)
 const activeIndex = ref();
 const toggle = (index) => {
-  activeIndex.value = activeIndex.value === index ? null : index;
+    activeIndex.value = activeIndex.value === index ? null : index;
 };
 onMounted(() => {
     getTrips()
@@ -436,7 +402,10 @@ const { addToast } = useToast()
 const submitBooking = async () => {
     console.log('Booking:', "payload")
     console.log(validateForm())
-    if (!validateForm()) return
+    if (!validateForm()) {
+        addToast('Please fill required faild correctly', 'error')
+        return
+    } loading.value = true
     try {
 
         const payload = {
@@ -444,12 +413,15 @@ const submitBooking = async () => {
             ...form,
 
         }
-        await addItem('reservations', payload)
-        addToast('Booking Request Sent Successfully', 'success')
-        addToast('Thank you! Our team will contact you shortly to confirm your trip details and pickup time.', 'success')
+        const res = await addItem('reservations', payload)
+        router.push(`/trips/confirmations/${res.data?.id}`)
+
 
     } catch (er) {
 
+    }
+    finally {
+        loading.value = false
     }
 
 }
@@ -479,8 +451,4 @@ import {
 } from "lucide-vue-next";
 import includeduicon from "@/assets/svgs/included.svg";
 import notincludeduicon from "@/assets/svgs/noincluded.svg";
-
-
-
-
 </script>
