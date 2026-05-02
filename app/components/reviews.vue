@@ -66,7 +66,9 @@ const getTrips = async () => {
         const res = await getItems('trip-reviews')
         const reviews = res.data?.data
 
-        data.value = reviews.slice(0, 3)
+        data.value = reviews.slice(0, 3).filter(
+            (r) => r.status === 'accepted'
+        )
 
 
     } catch (err) { }

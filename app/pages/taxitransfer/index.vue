@@ -83,17 +83,29 @@
                             Taxi Gallery
                         </h2>
 
-                        <div class="grid grid-cols-4 grid-rows-2 gap-3 h-[320px] md:h-[400px]">
-                            <div class="col-span-2 row-span-2 bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="bg-muted rounded-xl" />
-                            <div class="relative bg-muted rounded-xl overflow-hidden">
-                                <div class="absolute inset-0 bg-secondary/60 flex items-center justify-center">
-                                    <span class="text-secondary-foreground font-semibold text-sm md:text-base">
-                                        +45 Photos
-                                    </span>
-                                </div>
+                        <div
+                            class="relative group h-[420px] md:h-[400px] w-full rounded-2xl overflow-hidden shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+
+                            <!-- Decorative Border/Glow -->
+                            <div class="absolute inset-0 border-2 border-white/10 rounded-2xl z-10 pointer-events-none">
+                            </div>
+
+                            <!-- Gradient Overlay (Darkens bottom for depth) -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500 z-0">
+                            </div>
+
+                            <!-- The Image -->
+                            <img :src="taxiTransfer"
+                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                                alt="taxi transfer service" />
+
+                            <!-- Optional: Badge (e.g., "Premium Service") -->
+                            <div class="absolute top-4 right-4 z-20">
+                                <span
+                                    class="bg-white/90 backdrop-blur-md text-primary text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    Marsa Escape Taxi
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -186,7 +198,7 @@
                                                     @click="form.to = to; showTo = false"
                                                     class="flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors group">
                                                     <span class="text-sm font-medium group-hover:text-blue-600">{{ to
-                                                    }}</span>
+                                                        }}</span>
                                                     <Check v-if="form.to === to" class="w-4 h-4 text-blue-500" />
                                                 </div>
                                             </div>

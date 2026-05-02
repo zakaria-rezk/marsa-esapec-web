@@ -12,20 +12,25 @@
                     </h1>
                 </div>
             </section>
-            <div class="w-full absolute -mt-12 z-20 px-4">
-                <div class="w-3/4 mx-auto ">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-end gap-6">
-                        <div class="flex-1 w-full">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col md:flex-row items-end gap-6">
-                                <input v-model="search" type="text" placeholder="Search by trip name"
-                                    class="flex w-full items-center gap-2 border border-border rounded-lg px-4 py-3" />
-                            </div>
+
+            <div class="absolute -mt-32 md:-mt-12 z-20 left-0 right-0 px-4">
+ 
+                <div class="max-w-5xl mx-auto">
+                    <div
+                        class="bg-white rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center md:items-stretch gap-4 border border-slate-50 transition-all duration-500 hover:shadow-2xl">
+
+            
+                        <div class="relative flex-1 w-full">
+                      
+  
+      
+                            <input v-model="search" type="text" placeholder="Search by trip name..."
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 md:py-3 focus:bg-white focus:border-primary-danger focus:ring-4 focus:ring-primary-danger/5 outline-none transition-all text-base text-[#082852] font-medium" />
                         </div>
-                        <!-- Search Button -->
                         <button @click="getTrips(search)"
-                            class="bg-primary-danger text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap">
-                            <Search class="w-4 h-4" />
-                            Search
+                            class="w-full md:w-auto bg-primary-danger text-white font-bold px-8 py-4 md:py-3 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-red-200">
+                            <Search class="w-5 h-5 md:w-4 md:h-4" />
+                            <span>Search</span>
                         </button>
                     </div>
                 </div>
@@ -69,7 +74,6 @@ const loading = ref(false)
 /* ---------- Fetch Trips ---------- */
 const getTrips = async (name = "", perPage = 10) => {
     loading.value = true;
-    console.log("Fetching trips with name:", name)
     try {
         const res = await getItems("trip", {
 
