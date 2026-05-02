@@ -64,35 +64,78 @@
         </div>
 
         <!-- Mobile Menu (slide down) -->
-        <transition name="slide-fade">
-            <div v-show="open"
-                class="md:hidden fixed z-50 bg-white top-14 mt-3 w-full bg-surface rounded-lg shadow-lg p-4">
-                <div class="flex flex-col gap-3">
-                    <a href="#" class="text-secondary font-semibold border-b-2 border-transparent pb-1">Home</a>
-                    <a href="#" class="text-foreground hover:text-secondary transition-colors">Trips</a>
-                    <a href="#" class="text-foreground hover:text-secondary transition-colors">Packages</a>
-                    <a href="#" class="text-foreground hover:text-secondary transition-colors">Build Package</a>
-                    <button
-                        class="flex items-center gap-1 text-foreground hover:text-secondary transition-colors justify-between">
-                        <span>Services</span>
-                        <ChevronDown class="w-4 h-4" />
-                    </button>
+  <transition name="slide-fade">
+    <div v-show="open"
+      class="md:hidden fixed z-50 bg-white top-14 mt-3 w-[calc(100%-2rem)] left-4 bg-surface rounded-xl shadow-xl p-5 border border-slate-100"
+    >
+      <div class="flex flex-col gap-4">
+        <!-- Navigation Links with NuxtLink Logic -->
+        <NuxtLink 
+          to="/" 
+          class="text-foreground transition-colors py-1"
+          exact-active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Home
+        </NuxtLink>
 
-                    <div class="flex items-center gap-3 pt-2 border-t border-muted-foreground/20">
-                        <button class="flex items-center gap-1 text-foreground">
-                            <Globe class="w-4 h-4" />
-                            EN
-                            <ChevronDown class="w-3 h-3" />
-                        </button>
+        <NuxtLink 
+          to="/trips" 
+          class="text-foreground transition-colors py-1"
+          active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Trips
+        </NuxtLink>
 
-                        <button
-                            class="ml-auto border border-foreground rounded-full px-4 py-2 text-sm font-semibold text-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors">
-                            Get Started
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </transition>
+        <NuxtLink 
+          to="/packages" 
+          class="text-foreground transition-colors py-1"
+          active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Packages
+        </NuxtLink>
+
+        <NuxtLink 
+          to="/buildpackage" 
+          class="text-foreground transition-colors py-1"
+          active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Build Package
+        </NuxtLink>
+
+        <!-- Services section flattened to match desktop logic -->
+        <NuxtLink 
+          to="/taxitransfer" 
+          class="text-foreground transition-colors py-1"
+          active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Taxi Transfers
+        </NuxtLink>
+
+        <NuxtLink 
+          to="/simservices" 
+          class="text-foreground transition-colors py-1"
+          active-class="text-secondary font-bold border-b-2 border-secondary self-start"
+          @click="open = false"
+        >
+          Tourist Internet SIM
+        </NuxtLink>
+
+        <!-- Bottom Actions -->
+        <div class="flex items-center gap-3 pt-4 mt-2 border-t border-slate-100">
+          <button class="flex items-center gap-1 text-foreground font-medium">
+            <Globe class="w-4 h-4" />
+            EN
+            <ChevronDown class="w-3 h-3 text-slate-400" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </transition>
     </nav>
     <slot></slot>
     <!-- Footer -->
